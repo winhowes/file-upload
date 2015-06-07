@@ -95,6 +95,8 @@ Example:
 
       /**
        * `target` is the target url to upload the files to.
+       * Additionally by adding "<name>" in your url, it will be replaced by
+       * the file name.
        */
       target: {
         type: String,
@@ -247,7 +249,6 @@ Example:
         return;
       }
       var self = this;
-      this.fileName = file.name;
       var formData = new FormData();
       formData.append("file", file);
       var xhr = file.xhr = new XMLHttpRequest();
@@ -255,7 +256,8 @@ Example:
         var done = e.loaded, total = e.total;
         file.progress = Math.floor(done/total*1000)/10;
       });
-      xhr.open(this.method, this.url, true);
+      var url = this.target.replace("<name>", file.name);
+      xhr.open(this.method, url, true);
       xhr.onload = function(e) {
         if(xhr.status == 200) {
           self.fire('success', {xhr:xhr});
