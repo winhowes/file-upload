@@ -52,7 +52,7 @@ Example:
   
   <template>
     <div>
-      <paper-button icon="file-upload" class="blue" on-click="_onClick" raised>
+      <paper-button icon="file-upload" class="blue" on-click="_fileClick" raised>
         <content></content>
       </paper-button>
       <div id ='UploadBorder'>
@@ -192,7 +192,7 @@ Example:
     /**
      * Clicks the invisible file input
     */
-    _onClick: function(){
+    _fileClick: function(){
       var elem = this.$.fileInput;
       if(elem && document.createEvent) { // sanity check
         var evt = document.createEvent("MouseEvents");
