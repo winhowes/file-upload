@@ -139,6 +139,14 @@ Example:
       files: {
         type: Array,
         value: []
+      },
+      
+      /**
+       * `method` is the http method to be used during upload
+      */
+      method: {
+        type: String,
+        value: "PUT"
       }
     },
     
@@ -247,7 +255,7 @@ Example:
         var done = e.loaded, total = e.total;
         file.progress = Math.floor(done/total*1000)/10;
       });
-      xhr.open('POST', this.url, true);
+      xhr.open(this.method, this.url, true);
       xhr.onload = function(e) {
         if(xhr.status == 200) {
           self.fire('success', {xhr:xhr});
