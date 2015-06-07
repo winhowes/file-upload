@@ -208,14 +208,16 @@ Example:
     /**
      * Clears the list of files
     */
-    clear: function(){
+    clear: function() {
       this.files = [];
     },
     
-    ready: function(){
+    ready: function() {
       this.toggleAttribute("raised", this.raised, this.$.button);
-      this.toggleAttribute("noink", !this.noink, this.$.button);
-      if (this.droppable){
+      if (this.noink) {
+        this.toggleAttribute("noink", true, this.$.button);
+      }
+      if (this.droppable) {
         this.toggleAttribute("hidden", false, this.$.dropArea);
         this.setupDrop();
         this.fileName = this.dropText;
