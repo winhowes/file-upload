@@ -1,0 +1,56 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 Winston Howes. All rights reserved.
+This code may only be used under the MIT license found at https://github.com/winhowes/file-upload/blob/master/LICENSE
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../file-upload.html">
+  </head>
+  <body>
+
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <file-upload target="/test"></file-upload>
+
+    <script>
+      var myEl = document.querySelector('file-upload');
+
+      suite('<file-upload>', function() {
+
+        test('defines the "droppable" property', function() {
+          assert.equal(myEl.droppable, false);
+        });
+        
+        test('defines the "dropText" property', function() {
+          assert.equal(myEl.dropText, "Drop File Here");
+        });
+        
+        test('defines the "files" property', function() {
+          assert.deepEqual(myEl.files, []);
+        });
+        
+        test('defines the "multi" property', function() {
+          assert.equal(myEl.multi, true);
+        });
+        
+        test('defines the "progressInvisible" property', function() {
+          assert.equal(myEl.progressInvisible, false);
+        });
+        
+        test('defines the "target" property', function() {
+          assert.equal(myEl.target, "/test");
+        });
+
+      });
+    </script>
+
+  </body>
+</html>

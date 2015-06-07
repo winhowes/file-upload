@@ -1,0 +1,262 @@
+<!--
+@license
+Copyright (c) 2015 Winston Howes. All rights reserved.
+This code may only be used under the MIT license found at https://github.com/winhowes/file-upload/blob/master/LICENSE
+-->
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+
+    <file-upload target="/path/to/destination"></file-upload>
+
+@demo
+-->
+
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-progress/paper-progress.html">
+
+<dom-module id="file-upload">
+
+  <style type="text/css">
+    .enabled {
+      border: 1px dashed #555;
+    }
+    .hover {
+      opacity: .7;
+      border: 1px dashed #111;
+    }
+    #UploadBorder{
+      vertical-align: middle;
+      color: #555;
+      padding: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+      display: inline-block;
+    }
+    paper-button {
+      margin-bottom: 20px;
+    }
+    .file {
+      margin-top: 20px;
+    }
+    [invisible] {
+      display: none;
+    }
+    paper-progress {
+      --paper-progress-active-color: #03a9f4;
+    }
+  </style>
+  
+  <template>
+    <div>
+      <paper-button icon="file-upload" class="blue" on-click="_onClick" raised>
+        <content></content>
+      </paper-button>
+      <div id ='UploadBorder'>
+        <div id="dropArea" invisible>{{dropText}}</div>
+        <template is="dom-repeat" items="{{files}}">
+          <div class="file">
+            <div class="name">{{item.name}}</div>
+            <div invisible?={{item.progressInvisible}}>
+              <paper-progress value="{{item.progress}}"></paper-progress>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+    <input type="file" id="fileInput" on-change="_fileChange" hidden multiple="{{multi}}">
+    <!--<paper-toast id="toastSuccess" text="File uploaded successfully!"></paper-toast>
+    <paper-toast id="toastFail" text="Error uploading file!"></paper-toast>-->
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'file-upload',
+    
+     /**
+      * Fired when a response is received status code 200.
+      *
+      * @event success
+    */
+     /**
+      * Fired when a response is received other status code.
+      *
+      * @event error
+    */
+
+    properties: {
+
+      /**
+       * `target` is the target url to upload the files to.
+       */
+      target: {
+        type: String,
+        value: ""
+      },
+      
+      /**
+       * `progressInvisible` indicates whether or not the progress bar should be invisible.
+       */
+      progressInvisible: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+       * `droppable` indicates whether or not to allow file drop.
+      */
+      droppable: {
+        type: Boolean,
+        value: false
+      },
+      
+      /**
+       * `dropText` is the  text to display in the file drop area.
+      */
+      dropText: {
+        type: String,
+        value: "Drop File Here"
+      },
+      
+      /**
+       * `multi` indicates whether or not to allow multiple files to be uploaded.
+      */
+      multi: {
+        type: Boolean,
+        value: true
+      },
+      
+      /**
+       * `files` is the list of files to be uploaded
+      */
+      files: {
+        type: Array,
+        value: []
+      }
+    },
+    
+    /**
+     * Clears the list of files
+    */
+    clear: function(){
+      this.files = [];
+    },
+    
+    ready: function(){
+      if (this.droppable){
+        this.toggleAttribute("invisible", false, this.$.dropArea);
+        this.setupDrop();
+        this.fileName = this.dropText;
+      }
+    },
+    
+    /**
+     * A function to set up a drop area for drag-and-drop file uploads
+    */
+    setupDrop: function(){
+      var uploadBorder = this.$.UploadBorder;
+      this.toggleClass("enabled", true, uploadBorder);
+      this.ondragover = function (e) {
+        e.stopPropagation();
+        this.toggleClass("hover", true, uploadBorder);
+        return false;
+      }
+      this.ondragleave = function () {
+        this.toggleClass("hover", false, uploadBorder);
+        return false;
+      }
+      this.ondrop = function(event){
+        this.toggleClass("hover", false, uploadBorder);
+        event.preventDefault();
+        for (var i = 0; i<event.dataTransfer.files.length; i++) {
+          var file = {
+            name: event.dataTransfer.files[i].name,
+            type: event.dataTransfer.files[i].type,
+            size: event.dataTransfer.files[i].size,
+            progress: 0,
+            progressInvisible: this.progressInvisible
+          };
+          this.push("files", file);
+          this.uploadFile(file);
+        }
+      }
+    },
+    
+    /**
+     * Clicks the invisible file input
+    */
+    _onClick: function(){
+      var elem = this.$.fileInput;
+      if(elem && document.createEvent) { // sanity check
+        var evt = document.createEvent("MouseEvents");
+        evt.initEvent("click", true, false);
+        elem.dispatchEvent(evt);
+      }
+    },
+    
+    /**
+     * Called whenever the list of selected files changes
+    */
+    _fileChange: function(e) {
+      for(var i=0; i<e.target.files.length; i++){
+        var file = {
+          progress: 0,
+          name: e.target.files[i].name,
+          type: e.target.files[i].type,
+          size: e.target.files[i].size,
+          progressInvisible: this.progressInvisible
+        };
+        this.push("files", file);
+        this.uploadFile(file);
+      }
+    },
+    
+    /**
+     * Cancels the file upload for a specific file
+     *
+     * @param {object} a file, an element of the files array
+    */
+    cancel: function(file){
+      if(file && file.xhr){
+        file.xhr.abort();
+      }
+    },
+    
+    /**
+     * Uploads a file
+     *
+     * @param {object} a file, an element of the files array
+    */
+    uploadFile: function(file) {
+      if(!file){
+        return;
+      }
+      var self = this;
+      this.fileName = file.name;
+      var formData = new FormData();
+      formData.append("file", file);
+      var xhr = file.xhr = new XMLHttpRequest();
+      xhr.upload.addEventListener('progress', function(e){
+        var done = e.loaded, total = e.total;
+        file.progress = Math.floor(done/total*1000)/10;
+      });
+      xhr.open('POST', this.url, true);
+      xhr.onload = function(e) {
+        if(xhr.status == 200) {
+          self.fire('success', {xhr:xhr});
+        } else {
+          self.fire('error', {xhr:xhr});
+        }
+      };
+      xhr.send(formData);
+    }
+  });
+
+</script>
