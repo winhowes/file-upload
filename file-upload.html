@@ -44,8 +44,9 @@ Example:
       margin-bottom: 20px;
     }
     
-    .file {
-      margin-top: 20px;
+    #UploadBorder .file:not(:first-of-type) {
+      margin-top: 10px;
+      margin-bottom: 10px;
     }
     
     .commands {
@@ -85,7 +86,7 @@ Example:
       <paper-button id="button" icon="file-upload" class="blue" on-click="_fileClick">
         <content></content>
       </paper-button>
-      <div id ='UploadBorder'>
+      <div id='UploadBorder'>
         <div id="dropArea" hidden>{{dropText}}</div>
         <template is="dom-repeat" items="{{files}}">
           <div class="file">
@@ -222,25 +223,27 @@ Example:
       if (this.droppable) {
         this.toggleAttribute("hidden", false, this.$.dropArea);
         this.setupDrop();
-        this.fileName = this.dropText;
       }
     },
     
     /**
      * A function to set up a drop area for drag-and-drop file uploads
     */
-    setupDrop: function(){
+    setupDrop: function() {
       var uploadBorder = this.$.UploadBorder;
       this.toggleClass("enabled", true, uploadBorder);
-      this.ondragover = function (e) {
+      
+      this.ondragover = function(e) {
         e.stopPropagation();
         this.toggleClass("hover", true, uploadBorder);
         return false;
       }
-      this.ondragleave = function () {
+      
+      this.ondragleave = function() {
         this.toggleClass("hover", false, uploadBorder);
         return false;
       }
+      
       this.ondrop = function(event){
         this.toggleClass("hover", false, uploadBorder);
         event.preventDefault();
