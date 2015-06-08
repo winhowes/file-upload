@@ -86,7 +86,7 @@ Example:
         <content></content>
       </paper-button>
       <div id='UploadBorder'>
-        <div id="dropArea" hidden>{{dropText}}</div>
+        <div id="dropArea" hidden$="{{!_visibleDropText}}">{{dropText}}</div>
         <template is="dom-repeat" items="{{files}}">
           <div class="file">
             <div class="name">
@@ -161,7 +161,7 @@ Example:
       */
       dropText: {
         type: String,
-        value: "Drop File Here"
+        value: "Drop Files Here"
       },
       
       /**
@@ -202,6 +202,14 @@ Example:
       noink: {
         type: Boolean,
         value: false
+      },
+      
+      /**
+       * `_visibleDropText` indicates whether or not the drop text should be shown
+      */
+      _visibleDropText: {
+        type: Boolean,
+        value: true
       }
     },
     
@@ -247,7 +255,7 @@ Example:
         this.toggleClass("hover", false, uploadBorder);
         event.preventDefault();
         var length = event.dataTransfer.files.length;
-        for (var i = 0; i<length; i++) {
+        for(var i = 0; i<length; i++) {
           var specificFile = event.dataTransfer.files[i];
           var file = {
             name: specificFile.name,
@@ -302,6 +310,7 @@ Example:
       if(file && file.xhr){
         file.xhr.abort();
         this.splice("files", this.files.indexOf(file), 1);
+        this._showDropText();
       }
     },
     
@@ -330,6 +339,14 @@ Example:
     },
     
     /**
+     * Whether or not to display the drop text
+     *
+    */
+    _showDropText: function() {
+      this.set("_visibleDropText", !this.files.length && this.droppable);
+    },
+    
+    /**
      * Uploads a file
      *
      * @param {object} a file, an element of the files array
@@ -338,6 +355,7 @@ Example:
       if(!file){
         return;
       }
+      this._showDropText();
       var self = this;
       var formData = new FormData();
       formData.append("file", file);
