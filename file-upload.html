@@ -213,7 +213,9 @@ Example:
     },
     
     ready: function() {
-      this.toggleAttribute("raised", this.raised, this.$.button);
+      if (this.raised) {
+        this.toggleAttribute("raised", true, this.$.button);
+      }
       if (this.noink) {
         this.toggleAttribute("noink", true, this.$.button);
       }
