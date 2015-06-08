@@ -346,9 +346,7 @@ Example:
      * Whether or not to display the drop text
     */
     _showDropText: function() {
-      console.log("show", !this.files.length, this.droppable);
       this.set("_visibleDropText", !(!this.files.length && this.droppable));
-      console.log(this._visibleDropText);
     },
     
     /**
@@ -360,7 +358,6 @@ Example:
       if(!file){
         return;
       }
-      console.log("here");
       this._showDropText();
       var self = this;
       var formData = new FormData();
