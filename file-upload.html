@@ -90,7 +90,7 @@ Example:
         <content></content>
       </paper-button>
       <div id='UploadBorder'>
-        <div id="dropArea" hidden$="{{!_visibleDropText}}">{{dropText}}</div>
+        <div id="dropArea" hidden$="{{_visibleDropText}}">{{dropText}}</div>
         <template is="dom-repeat" items="{{files}}">
           <div class="file">
             <div class="name">
@@ -344,10 +344,11 @@ Example:
     
     /**
      * Whether or not to display the drop text
-     *
     */
     _showDropText: function() {
-      this.set("_visibleDropText", !this.files.length && this.droppable);
+      console.log("show", !this.files.length, this.droppable);
+      this.set("_visibleDropText", !(!this.files.length && this.droppable));
+      console.log(this._visibleDropText);
     },
     
     /**
@@ -359,6 +360,7 @@ Example:
       if(!file){
         return;
       }
+      console.log("here");
       this._showDropText();
       var self = this;
       var formData = new FormData();
