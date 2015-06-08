@@ -346,9 +346,7 @@ Example:
      * Whether or not to display the drop text
     */
     _showDropText: function() {
-      console.log(this.files.length, this.droppable, !(!this.files.length && this.droppable));
       this.set("_hiddenDropText", !(!this.files.length && this.droppable));
-      //this.notifyPath("_hiddenDropText", !(!this.files.length && this.droppable));
     },
     
     /**
