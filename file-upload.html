@@ -40,7 +40,7 @@ Example:
       display: inline-block;
     }
     
-    #dropArea {{
+    #dropArea {
       text-align: center;
     }
     
@@ -90,7 +90,7 @@ Example:
         <content></content>
       </paper-button>
       <div id='UploadBorder'>
-        <div id="dropArea" hidden$="{{_visibleDropText}}">{{dropText}}</div>
+        <div id="dropArea" hidden$="{{_hiddenDropText}}">{{dropText}}</div>
         <template is="dom-repeat" items="{{files}}">
           <div class="file">
             <div class="name">
@@ -209,11 +209,11 @@ Example:
       },
       
       /**
-       * `_visibleDropText` indicates whether or not the drop text should be shown
+       * `_hiddenDropText` indicates whether or not the drop text should be shown
       */
-      _visibleDropText: {
+      _hiddenDropText: {
         type: Boolean,
-        value: false
+        value: true
       }
     },
     
@@ -232,7 +232,7 @@ Example:
         this.toggleAttribute("noink", true, this.$.button);
       }
       if (this.droppable) {
-        this.toggleAttribute("hidden", false, this.$.dropArea);
+        this._showDropText();
         this.setupDrop();
       }
     },
@@ -346,7 +346,9 @@ Example:
      * Whether or not to display the drop text
     */
     _showDropText: function() {
-      this.set("_visibleDropText", !(!this.files.length && this.droppable));
+      console.log(this.files.length, this.droppable, !(!this.files.length && this.droppable));
+      this.set("_hiddenDropText", !(!this.files.length && this.droppable));
+      //this.notifyPath("_hiddenDropText", !(!this.files.length && this.droppable));
     },
     
     /**
