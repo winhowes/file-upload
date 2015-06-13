@@ -97,7 +97,8 @@ Example:
               <span>{{item.name}}</span>
               <div class="commands">
                 <iron-icon icon="autorenew" title="Retry Upload" on-click="_retryUpload" hidden$="{{!item.error}}"></iron-icon>
-                <iron-icon icon="cancel" title="Remove" on-click="_cancelUpload"></iron-icon>
+                <iron-icon icon="cancel" title="Remove" on-click="_cancelUpload" hidden$="{{!item.complete}}"></iron-icon>
+                <iron-icon icon="done" title="Success" hidden$="{{item.complete}}"></iron-icon>
               </div>
             </div>
             <div class="error" hidden$="{{!item.error}}">Error uploading file...</div>
@@ -266,7 +267,8 @@ Example:
             type: specificFile.type,
             size: specificFile.size,
             progress: 0,
-            error: false
+            error: false,
+            complete: false
           };
           this.push("files", file);
           this.uploadFile(file);
@@ -294,11 +296,12 @@ Example:
       for(var i=0; i<length; i++){
         var specificFile = e.target.files[i];
         var file = {
-          progress: 0,
           name: specificFile.name,
           type: specificFile.type,
           size: specificFile.size,
-          error: false
+          progress: 0,
+          error: false,
+          complete: false
         };
         this.push("files", file);
         this.uploadFile(file);
@@ -367,12 +370,14 @@ Example:
       xhr.upload.addEventListener('progress', function(e) {
         var done = e.loaded, total = e.total;
         self.set(prefix + ".progress", Math.floor((done/total)*1000)/10);
+        self.set(prefix + ".complete", 100 === Math.floor((done/total)*1000)/10);
       });
       var url = this.target.replace("<name>", file.name);
       xhr.open(this.method, url, true);
       xhr.onload = function(e) {
         if(xhr.status === 200) {
           self.fire('success', {xhr:xhr});
+          self.set(prefix + ".complete", true);
         } else {
           self.set(prefix + ".error", true);
           self.set(prefix + ".progress", 100);
