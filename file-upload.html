@@ -384,6 +384,7 @@ Example:
         }
         else {
           self.set(prefix + ".error", true);
+          self.set(prefix + ".complete", false);
           self.set(prefix + ".progress", 100);
           self.updateStyles();
           self.fire('error', {xhr:xhr});
