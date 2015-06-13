@@ -360,12 +360,13 @@ Example:
       }
       this._showDropText();
       var self = this;
+      var prefix = "files." + self.files.indexOf(file);
       var formData = new FormData();
       formData.append("file", file);
       var xhr = file.xhr = new XMLHttpRequest();
-      xhr.upload.addEventListener('progress', function(e){
+      xhr.upload.addEventListener('progress', function(e) {
         var done = e.loaded, total = e.total;
-        file.progress = Math.floor(done/total*1000)/10;
+        self.set(prefix + ".progress", Math.floor((done/total)*1000)/10);
       });
       var url = this.target.replace("<name>", file.name);
       xhr.open(this.method, url, true);
@@ -373,7 +374,6 @@ Example:
         if(xhr.status === 200) {
           self.fire('success', {xhr:xhr});
         } else {
-          var prefix = "files." + self.files.indexOf(file);
           self.set(prefix + ".error", true);
           self.set(prefix + ".progress", 100);
           self.updateStyles();
