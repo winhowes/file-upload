@@ -222,7 +222,8 @@ Example:
      * Clears the list of files
     */
     clear: function() {
-      this.files = [];
+      this.set("files", []);
+      this._showDropText();
     },
     
     ready: function() {
