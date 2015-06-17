@@ -98,7 +98,7 @@ Example:
               <div class="commands">
                 <iron-icon icon="autorenew" title="Retry Upload" on-click="_retryUpload" hidden$="{{!item.error}}"></iron-icon>
                 <iron-icon icon="cancel" title="Remove" on-click="_cancelUpload" hidden$="{{item.complete}}"></iron-icon>
-                <iron-icon icon="done" title="Success" hidden$="{{!item.complete}}"></iron-icon>
+                <iron-icon icon="check-circle" title="Success" hidden$="{{!item.complete}}"></iron-icon>
               </div>
             </div>
             <div class="error" hidden$="{{!item.error}}">Error uploading file...</div>
