@@ -262,15 +262,10 @@ Example:
         event.preventDefault();
         var length = event.dataTransfer.files.length;
         for(var i = 0; i<length; i++) {
-          var specificFile = event.dataTransfer.files[i];
-          var file = {
-            name: specificFile.name,
-            type: specificFile.type,
-            size: specificFile.size,
-            progress: 0,
-            error: false,
-            complete: false
-          };
+          var file = event.dataTransfer.files[i];
+          file.progress = 0;
+          file.error = false;
+          file.complete = false;
           this.push("files", file);
           this.uploadFile(file);
         }
@@ -295,15 +290,10 @@ Example:
     _fileChange: function(e) {
       var length = e.target.files.length;
       for(var i=0; i<length; i++){
-        var specificFile = e.target.files[i];
-        var file = {
-          name: specificFile.name,
-          type: specificFile.type,
-          size: specificFile.size,
-          progress: 0,
-          error: false,
-          complete: false
-        };
+        var file = e.target.files[i];
+        file.progress = 0;
+        file.error = false;
+        file.complete = false;
         this.push("files", file);
         this.uploadFile(file);
       }
