@@ -361,10 +361,10 @@ Example:
       
       var xhr = file.xhr = new XMLHttpRequest();
       
-      xhr.upload.addEventListener('progress', function(e) {
+      xhr.onprogress = function(e) {
         var done = e.loaded, total = e.total;
         self.set(prefix + ".progress", Math.floor((done/total)*1000)/10);
-      });
+      };
       
       var url = this.target.replace("<name>", file.name);
       xhr.open(this.method, url, true);
