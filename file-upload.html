@@ -215,6 +215,14 @@ Example:
       _hiddenDropText: {
         type: Boolean,
         value: true
+      },
+
+      /**
+       * Authorization header
+      */
+      authorization: {
+        type: String,
+        value: null,
       }
     },
     
@@ -360,7 +368,7 @@ Example:
       formData.append("file", file, file.name);
       
       var xhr = file.xhr = new XMLHttpRequest();
-      
+
       xhr.onprogress = function(e) {
         var done = e.loaded, total = e.total;
         self.set(prefix + ".progress", Math.floor((done/total)*1000)/10);
@@ -368,6 +376,9 @@ Example:
       
       var url = this.target.replace("<name>", file.name);
       xhr.open(this.method, url, true);
+      if (this.authorization)
+        xhr.setRequestHeader('Authorization', this.authorization);
+
       xhr.onload = function(e) {
         if(xhr.status === 200) {
           self.fire('success', {xhr:xhr});
