@@ -28,26 +28,40 @@ This code may only be used under the MIT license found at https://github.com/win
         test('defines the "droppable" property', function() {
           assert.equal(myEl.droppable, false);
         });
-        
+
         test('defines the "dropText" property', function() {
-          assert.equal(myEl.dropText, "Drop File Here");
+          assert.equal(myEl.dropText, "Drop Files Here");
         });
-        
+
         test('defines the "files" property', function() {
           assert.deepEqual(myEl.files, []);
         });
-        
+
+        test('defines the "headers" property', function() {
+          assert.deepEqual(myEl.headers, {});
+        });
+
+        test('defines the "noink" property', function() {
+          assert.equal(myEl.noink, false);
+        });
+
         test('defines the "multi" property', function() {
           assert.equal(myEl.multi, true);
         });
-        
-        test('defines the "progressInvisible" property', function() {
-          assert.equal(myEl.progressInvisible, false);
+
+        test('defines the "progressHidden" property', function() {
+          assert.equal(myEl.progressHidden, false);
         });
-        
+
+        test('defines the "raised" property', function() {
+          assert.equal(myEl.raised, false);
+        });
+
         test('defines the "target" property', function() {
           assert.equal(myEl.target, "/test");
         });
+
+
 
       });
     </script>

@@ -25,12 +25,12 @@ Example:
     .enabled {
       border: 1px dashed #555;
     }
-    
+
     .hover {
       opacity: .7;
       border: 1px dashed #111;
     }
-    
+
     #UploadBorder{
       vertical-align: middle;
       color: #555;
@@ -39,51 +39,51 @@ Example:
       overflow-y: auto;
       display: inline-block;
     }
-    
+
     #dropArea {
       text-align: center;
     }
-    
+
     paper-button {
       margin-bottom: 20px;
     }
-    
+
     .file {
       padding: 10px 0px;
     }
-    
+
     .commands {
       float: right;
     }
-    
+
     .commands iron-icon:not([icon="check-circle"]) {
       cursor: pointer;
       opacity: .9;
     }
-    
+
     .commands iron-icon:hover {
       opacity: 1;
     }
-    
+
     [hidden] {
       display: none;
     }
-    
+
     .error {
       color: #f40303;
       font-size: 11px;
       margin: 2px 0px -3px;
     }
-    
+
     paper-progress {
       --paper-progress-active-color: #03a9f4;
     }
-    
+
     paper-progress[error] {
       --paper-progress-active-color: #f40303;
     }
   </style>
-  
+
   <template>
     <div>
       <paper-button id="button" icon="file-upload" class="blue" on-click="_fileClick">
@@ -121,7 +121,7 @@ Example:
   Polymer({
 
     is: 'file-upload',
-    
+
      /**
       * Fired when a response is received status code 200.
       *
@@ -144,7 +144,7 @@ Example:
         type: String,
         value: ""
       },
-      
+
       /**
        * `progressHidden` indicates whether or not the progress bar should be hidden.
        */
@@ -160,7 +160,7 @@ Example:
         type: Boolean,
         value: false
       },
-      
+
       /**
        * `dropText` is the  text to display in the file drop area.
       */
@@ -168,7 +168,7 @@ Example:
         type: String,
         value: "Drop Files Here"
       },
-      
+
       /**
        * `multi` indicates whether or not to allow multiple files to be uploaded.
       */
@@ -176,7 +176,7 @@ Example:
         type: Boolean,
         value: true
       },
-      
+
       /**
        * `files` is the list of files to be uploaded
       */
@@ -184,7 +184,7 @@ Example:
         type: Array,
         value: []
       },
-      
+
       /**
        * `method` is the http method to be used during upload
       */
@@ -192,7 +192,7 @@ Example:
         type: String,
         value: "PUT"
       },
-      
+
       /**
        * `raised` indicates whether or not the button should be raised
       */
@@ -200,7 +200,7 @@ Example:
         type: Boolean,
         value: false
       },
-      
+
       /**
        * `noink` indicates that the button should not have an ink effect
       */
@@ -208,16 +208,24 @@ Example:
         type: Boolean,
         value: false
       },
-      
+
       /**
        * `_hiddenDropText` indicates whether or not the drop text should be shown
       */
       _hiddenDropText: {
         type: Boolean,
         value: true
+      },
+
+      /**
+       * `headers` is a key value map of header names and values
+      */
+      headers: {
+        type: Object,
+        value: {},
       }
     },
-    
+
     /**
      * Clears the list of files
     */
@@ -225,7 +233,7 @@ Example:
       this.set("files", []);
       this._showDropText();
     },
-    
+
     ready: function() {
       if (this.raised) {
         this.toggleAttribute("raised", true, this.$.button);
@@ -238,30 +246,30 @@ Example:
         this.setupDrop();
       }
     },
-    
+
     /**
      * A function to set up a drop area for drag-and-drop file uploads
     */
     setupDrop: function() {
       var uploadBorder = this.$.UploadBorder;
       this.toggleClass("enabled", true, uploadBorder);
-      
+
       this.ondragover = function(e) {
         e.stopPropagation();
         this.toggleClass("hover", true, uploadBorder);
         return false;
       }
-      
+
       this.ondragleave = function() {
         this.toggleClass("hover", false, uploadBorder);
         return false;
       }
-      
-      this.ondrop = function(event){
+
+      this.ondrop = function(event) {
         this.toggleClass("hover", false, uploadBorder);
         event.preventDefault();
         var length = event.dataTransfer.files.length;
-        for(var i = 0; i<length; i++) {
+        for (var i = 0; i < length; i++) {
           var file = event.dataTransfer.files[i];
           file.progress = 0;
           file.error = false;
@@ -271,25 +279,25 @@ Example:
         }
       }
     },
-    
+
     /**
      * Clicks the invisible file input
     */
-    _fileClick: function(){
+    _fileClick: function() {
       var elem = this.$.fileInput;
-      if(elem && document.createEvent) { // sanity check
+      if (elem && document.createEvent) { // sanity check
         var evt = document.createEvent("MouseEvents");
         evt.initEvent("click", true, false);
         elem.dispatchEvent(evt);
       }
     },
-    
+
     /**
      * Called whenever the list of selected files changes
     */
     _fileChange: function(e) {
       var length = e.target.files.length;
-      for(var i=0; i<length; i++){
+      for (var i = 0; i < length; i++) {
         var file = e.target.files[i];
         file.progress = 0;
         file.error = false;
@@ -298,20 +306,20 @@ Example:
         this.uploadFile(file);
       }
     },
-    
+
     /**
      * Cancels the file upload for a specific file
      *
      * @param {object} a file, an element of the files array
     */
     cancel: function(file) {
-      if(file && file.xhr){
+      if (file && file.xhr) {
         file.xhr.abort();
         this.splice("files", this.files.indexOf(file), 1);
         this._showDropText();
       }
     },
-    
+
     /**
      * Cancels the file upload
      *
@@ -320,10 +328,10 @@ Example:
     _cancelUpload: function(e) {
       this.cancel(e.model.__data__.item);
     },
-    
+
     /**
      * Retries to upload the file
-     * 
+     *
      * @param {object}, an event object
     */
     _retryUpload: function(e) {
@@ -331,54 +339,58 @@ Example:
       e.model.set("item.progress", 0);
       // The async helps give visual feedback of a retry occurring, even though it's less efficient.
       var self = this;
-      this.async(function(){
+      this.async(function() {
         self.uploadFile(e.model.__data__.item);
       }, 50);
     },
-    
+
     /**
      * Whether or not to display the drop text
     */
     _showDropText: function() {
       this.set("_hiddenDropText", !(!this.files.length && this.droppable));
     },
-    
+
     /**
      * Uploads a file
      *
      * @param {object} a file, an element of the files array
     */
     uploadFile: function(file) {
-      if(!file){
+      if (!file) {
         return;
       }
       this._showDropText();
       var self = this;
       var prefix = "files." + self.files.indexOf(file);
-      
+
       var formData = new FormData();
       formData.append("file", file, file.name);
-      
+
       var xhr = file.xhr = new XMLHttpRequest();
-      
+
       xhr.onprogress = function(e) {
         var done = e.loaded, total = e.total;
         self.set(prefix + ".progress", Math.floor((done/total)*1000)/10);
       };
-      
+
       var url = this.target.replace("<name>", file.name);
       xhr.open(this.method, url, true);
-      xhr.onload = function(e) {
-        if(xhr.status === 200) {
-          self.fire('success', {xhr:xhr});
-          self.set(prefix + ".complete", true);
+      for (key in this.headers) {
+        if (headers.hasOwnProperty(key)) {
+          xhr.setRequestHeader(key, this.headers[key]);
         }
-        else {
+      }
+      xhr.onload = function(e) {
+        if (xhr.status === 200) {
+          self.fire("success", {xhr: xhr});
+          self.set(prefix + ".complete", true);
+        } else {
           self.set(prefix + ".error", true);
           self.set(prefix + ".complete", false);
           self.set(prefix + ".progress", 100);
           self.updateStyles();
-          self.fire('error', {xhr:xhr});
+          self.fire("error", {xhr:xhr});
         }
       };
       xhr.send(formData);
