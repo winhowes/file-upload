@@ -377,7 +377,7 @@ Example:
       var url = this.target.replace("<name>", file.name);
       xhr.open(this.method, url, true);
       for (key in this.headers) {
-        if (headers.hasOwnProperty(key)) {
+        if (this.headers.hasOwnProperty(key)) {
           xhr.setRequestHeader(key, this.headers[key]);
         }
       }
