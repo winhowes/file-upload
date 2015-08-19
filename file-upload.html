@@ -96,12 +96,12 @@ Example:
             <div class="name">
               <span>{{item.name}}</span>
               <div class="commands">
-                <iron-icon icon="autorenew" title="Retry Upload" on-click="_retryUpload" hidden$="{{!item.error}}"></iron-icon>
-                <iron-icon icon="cancel" title="Remove" on-click="_cancelUpload" hidden$="{{item.complete}}"></iron-icon>
-                <iron-icon icon="check-circle" title="Success" hidden$="{{!item.complete}}"></iron-icon>
+                <iron-icon icon="autorenew" title="{{retryText}}" on-click="_retryUpload" hidden$="{{!item.error}}"></iron-icon>
+                <iron-icon icon="cancel" title="{{removeText}}" on-click="_cancelUpload" hidden$="{{item.complete}}"></iron-icon>
+                <iron-icon icon="check-circle" title="{{successText}}" hidden$="{{!item.complete}}"></iron-icon>
               </div>
             </div>
-            <div class="error" hidden$="{{!item.error}}">Error uploading file...</div>
+            <div class="error" hidden$="{{!item.error}}">{{errorText}}</div>
             <div hidden$={{progressHidden}}>
               <paper-progress value$="{{item.progress}}" error$="{{item.error}}"></paper-progress>
             </div>
@@ -182,7 +182,9 @@ Example:
       */
       files: {
         type: Array,
-        value: []
+        value: function() {
+            return [];
+        }
       },
 
       /**
@@ -210,19 +212,51 @@ Example:
       },
 
       /**
-       * `_shownDropText` indicates whether or not the drop text should be shown
-      */
-      _shownDropText: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
        * `headers` is a key value map of header names and values
       */
       headers: {
         type: Object,
         value: {},
+      },
+
+      /**
+       * `retryText` is the text for the tooltip to retry an upload
+      */
+      retryText: {
+        type: String,
+        value: 'Retry Upload'
+      },
+
+      /**
+       * `removeText` is the text for the tooltip to remove an upload
+      */
+      removeText: {
+          type: String,
+          value: 'Remove'
+      },
+
+      /**
+       * `successText` is the text for the tooltip of a successful upload
+      */
+      successText: {
+          type: String,
+          value: 'Success'
+      },
+
+      /**
+       * `errorText` is the text to display for a failed upload
+      */
+      errorText: {
+          type: String,
+          value: 'Error uploading file...'
+      },
+
+      /**
+       * `_shownDropText` indicates whether or not the drop text should be shown
+      */
+      _shownDropText: {
+        type: Boolean,
+        value: false
       }
     },
 
