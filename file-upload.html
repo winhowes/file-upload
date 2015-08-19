@@ -90,7 +90,7 @@ Example:
         <content></content>
       </paper-button>
       <div id='UploadBorder'>
-        <div id="dropArea" hidden$="{{_hiddenDropText}}">{{dropText}}</div>
+        <div id="dropArea" hidden$="{{!_shownDropText}}">{{dropText}}</div>
         <template is="dom-repeat" items="{{files}}">
           <div class="file">
             <div class="name">
@@ -174,7 +174,7 @@ Example:
       */
       multi: {
         type: Boolean,
-        value: true
+        value: false
       },
 
       /**
@@ -210,11 +210,11 @@ Example:
       },
 
       /**
-       * `_hiddenDropText` indicates whether or not the drop text should be shown
+       * `_shownDropText` indicates whether or not the drop text should be shown
       */
-      _hiddenDropText: {
+      _shownDropText: {
         type: Boolean,
-        value: true
+        value: false
       },
 
       /**
@@ -348,7 +348,7 @@ Example:
      * Whether or not to display the drop text
     */
     _showDropText: function() {
-      this.set("_hiddenDropText", !(!this.files.length && this.droppable));
+      this.set("_shownDropText", (!this.files.length && this.droppable));
     },
 
     /**
