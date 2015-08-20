@@ -132,6 +132,11 @@ Example:
       *
       * @event error
     */
+    /**
+     * Fired when a file is about to be uploaded.
+     *
+     * @event pre-upload
+   */
 
     properties: {
 
@@ -394,9 +399,9 @@ Example:
       if (!file) {
         return;
       }
+      this.fire('pre-upload');
       this._showDropText();
       var self = this;
-	  self.fire('request');
       var prefix = "files." + self.files.indexOf(file);
 
       var formData = new FormData();
