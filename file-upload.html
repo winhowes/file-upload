@@ -401,8 +401,8 @@ Example:
       }
       this.fire('pre-upload');
       this._showDropText();
+      var prefix = "files." + this.files.indexOf(file);
       var self = this;
-      var prefix = "files." + self.files.indexOf(file);
 
       var formData = new FormData();
       formData.append("file", file, file.name);
