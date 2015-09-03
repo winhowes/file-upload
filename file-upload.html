@@ -409,7 +409,7 @@ Example:
 
       var xhr = file.xhr = new XMLHttpRequest();
 
-      xhr.onprogress = function(e) {
+      xhr.upload.onprogress = function(e) {
         var done = e.loaded, total = e.total;
         self.set(prefix + ".progress", Math.floor((done/total)*1000)/10);
       };
