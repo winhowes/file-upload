@@ -135,7 +135,7 @@ Example:
     /**
      * Fired when a file is about to be uploaded.
      *
-     * @event beforeUpload
+     * @event before-upload
    */
 
     properties: {
@@ -399,7 +399,7 @@ Example:
       if (!file) {
         return;
       }
-      this.fire('beforeUpload');
+      this.fire('before-upload');
       this._showDropText();
       var prefix = "files." + this.files.indexOf(file);
       var self = this;
