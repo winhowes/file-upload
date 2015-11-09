@@ -109,7 +109,7 @@ Example:
         </template>
       </div>
     </div>
-    <input type="file" id="fileInput" on-change="_fileChange" hidden multiple="{{multi}}">
+    <input type="file" id="fileInput" on-change="_fileChange" hidden multiple="{{multi}}" accept="{{accept}}">
     <!--<paper-toast id="toastSuccess" text="File uploaded successfully!"></paper-toast>
     <paper-toast id="toastFail" text="Error uploading file!"></paper-toast>-->
   </template>
@@ -149,6 +149,16 @@ Example:
         type: String,
         value: ""
       },
+
+      /**
+       * `accept` is the set of comma separated file extensions or mime types
+       * to filter as accepted.
+      */
+
+      accept: {
+        type: String,
+        value: ""
+      }
 
       /**
        * `progressHidden` indicates whether or not the progress bar should be hidden.
