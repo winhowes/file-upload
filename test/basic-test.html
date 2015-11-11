@@ -41,12 +41,16 @@ This code may only be used under the MIT license found at https://github.com/win
           assert.deepEqual(myEl.headers, {});
         });
 
+        test('defines the "accept" property', function() {
+          assert.deepEqual(myEl.accept, '');
+        });
+
         test('defines the "noink" property', function() {
           assert.equal(myEl.noink, false);
         });
 
         test('defines the "multi" property', function() {
-          assert.equal(myEl.multi, true);
+          assert.equal(myEl.multi, false);
         });
 
         test('defines the "progressHidden" property', function() {
@@ -60,8 +64,6 @@ This code may only be used under the MIT license found at https://github.com/win
         test('defines the "target" property', function() {
           assert.equal(myEl.target, "/test");
         });
-
-
 
       });
     </script>
