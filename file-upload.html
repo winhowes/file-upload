@@ -320,15 +320,19 @@ Example:
         var length = event.dataTransfer.files.length;
         for (var i = 0; i < length; i++) {
           var file = event.dataTransfer.files[i];
-          
+
           // Check if multiple upload is allowed
-          if (!this.multi && this.files.length != 0) return; 
-          
+          if (!this.multi && this.files.length !== 0) {
+            return;
+          }
+
           // Check if filetype is accepted
-          var mimeType = ((file.type != '') ? file.type.match(/^[^\/]*\//)[0] : null);
+          var mimeType = ((file.type !== '') ? file.type.match(/^[^\/]*\//)[0] : null);
           var fileType = file.name.match(/\.[^\.]*$/)[0];
-          if (this.accept != '' && !(this.accept.indexOf(mimeType) > -1 || this.accept.indexOf(fileType) > -1)) return; 
-          
+          if (this.accept !== '' && !(this.accept.indexOf(mimeType) > -1 || this.accept.indexOf(fileType) > -1)) {
+            return;
+          }
+
           file.progress = 0;
           file.error = false;
           file.complete = false;
