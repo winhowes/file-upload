@@ -1,0 +1,33 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 Winston Howes. All rights reserved.
+This code may only be used under the MIT license found at https://github.com/winhowes/file-upload/blob/master/LICENSE
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>file-upload Demo</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../file-upload.html">
+    <style>
+      body {
+        font-family: Arial;
+      }
+    </style>
+  </head>
+  <body>
+
+    <p>An example of <code>&lt;file-upload&gt;</code>:</p>
+
+    <h2>Without drop enabled:</h2>
+    <file-upload>Choose File</file-upload>
+
+    <h2>With drop enabled and images only:</h2>
+    <file-upload droppable="true" raised="true" multi="true" accept="image/*">Choose File</file-upload>
+
+    <h2>Images only</h2>
+    <file-upload accept="image/*">Choose File</file-upload>
+  </body>
+</html>

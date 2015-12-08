@@ -1,0 +1,42 @@
+{
+  "name": "file-upload",
+  "authors": [
+    "Winston Howes <winstonhowes@gmail.com>"
+  ],
+  "description": "An element for using ajax to upload files.",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "file",
+    "ajax",
+    "upload"
+  ],
+  "main": "file-upload.html",
+  "license": "MIT",
+  "homepage": "https://github.com/winhowes/file-upload/",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/",
+    "/bower_components/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "paper-progress": "PolymerElements/paper-progress#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  },
+  "_release": "9554b05201",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "9554b0520173e754bf27093f89ff55754a5ddffc"
+  },
+  "_source": "git://github.com/winhowes/file-upload.git",
+  "_target": "master",
+  "_originalSource": "winhowes/file-upload",
+  "_direct": true
+}
