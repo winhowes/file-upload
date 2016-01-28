@@ -17,7 +17,7 @@ Example:
 
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-progress/paper-progress.html">
-  <link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
 
 <dom-module id="file-upload">
 
@@ -348,7 +348,7 @@ Example:
           // Check if file has already been uploaded
           if (this._fileExists(file)) {
             this.fire('duplicate-file-error', file);
-            return;
+            continue;
           }
           
           // Check if filetype is accepted
@@ -442,7 +442,7 @@ Example:
      * @param {object}, an event object
      */
     _deleteUpload: function(e) {
-      this.remove(e.model.__data__.item);  
+      this.remove(e.model.__data__.item);
     },
 
     /**
