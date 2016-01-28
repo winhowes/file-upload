@@ -100,6 +100,10 @@ Example:
         <iron-icon icon="file-upload"></iron-icon>
         <content></content>
       </paper-button>
+      <paper-button id="deletebutton" icon="delete" class="blue" on-click="clear" hidden$="{{files.length === 0}}">
+        <iron-icon icon="delete"></iron-icon>
+        <content></content>
+      </paper-button>
       <div id='UploadBorder'>
         <div id="dropArea" hidden$="{{!_shownDropText}}">{{dropText}}</div>
         <template is="dom-repeat" items="{{files}}">
