@@ -399,8 +399,12 @@ Example:
         file.progress = 0;
         file.error = false;
         file.complete = false;
-        this.push("files", file);
-        this.uploadFile(file);
+        if (!this._fileExists(file)) {
+            this.push("files", file);
+            this.uploadFile(file);
+        } else {
+            this.fire('duplicate-file-error', file);
+        }
       }
     },
 
