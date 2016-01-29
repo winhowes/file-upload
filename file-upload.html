@@ -100,7 +100,7 @@ Example:
         <iron-icon icon="file-upload"></iron-icon>
         <content></content>
       </paper-button>
-      <paper-button id="deletebutton" icon="delete" class="blue" on-click="clear" hidden$="{{files.length === 0}}">
+      <paper-button id="deletebutton" icon="delete" class="blue" on-click="clear" hidden$="{{!hasFiles}}">
         <iron-icon icon="delete"></iron-icon>
         <content></content>
       </paper-button>
@@ -216,7 +216,17 @@ Example:
         value: function() {
             return [];
         },
-        notify: true
+        notify: true,
+        observer: '_filesChanged'
+      },
+
+      /**
+       * `hasFiles` indicates if there are any files uploaded
+       */
+      hasFiles: {
+        type: Boolean,
+        value: false,
+        notify: true  
       },
 
       /**
@@ -371,6 +381,13 @@ Example:
           this.uploadFile(file);
         }
       }
+    },
+    
+    /**
+     * Update the hasFiles flag
+     */
+    _filesChanged: function(e) {
+        this.hasFiles = (this.files.length > 0);
     },
     
     /**
