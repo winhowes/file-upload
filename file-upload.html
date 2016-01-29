@@ -216,8 +216,7 @@ Example:
         value: function() {
             return [];
         },
-        notify: true,
-        observer: '_filesChanged'
+        notify: true
       },
 
       /**
@@ -382,6 +381,13 @@ Example:
         }
       }
     },
+    
+    /**
+     * observers
+     */
+    observers: [
+        '_filesChanged(files.*)'
+    ],
     
     /**
      * Update the hasFiles flag
