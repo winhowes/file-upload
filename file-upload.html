@@ -403,27 +403,6 @@ Example:
     setupDrop: function() {
       var uploadBorder = this.$.UploadBorder;
       
-      this.getImageSize = function(file) {
-        var _URL = window.URL || window.webkitURL;
-        var image = new Image();
-        var finished = false;
-        var error = false;
-        
-        image.onload = function() {
-            finished = true;
-            error = false;
-        };
-        
-        image.onerror = function() {
-          finshed = true;
-          error = true;
-        };
-        
-        image.src = _URL.createObjectURL(file);
-        // while (!finished) {}
-        return error ? {x: 0, y: 0} : { x: image.width, y: image.height };
-      }
-      
       this.toggleClass("enabled", true, uploadBorder);
       
       this.ondragover = function(e) {
@@ -526,7 +505,6 @@ Example:
         file.progress = 0;
         file.error = false;
         file.complete = false;
-
         
         if (!this._fileExists(file)) {
             var that = this;
