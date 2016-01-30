@@ -18,6 +18,7 @@ Example:
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-progress/paper-progress.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
+<script src="../jQuery/dist/jquery.js"></script>
 
 <dom-module id="file-upload">
 
@@ -318,7 +319,8 @@ Example:
         value: [
           [640,480],
           [800,600],
-          [1024,768]
+          [1024,768],
+          [120,120]
         ]
       },
       
@@ -351,18 +353,55 @@ Example:
         this.setupDrop();
       }
     },
-
+    
+    /**
+     * Add file to list and upload it
+     */
+    _addAndUploadFile: function(file) {
+        this.push("files", file);
+        this.uploadFile(file);
+    },
+    
+    _isSupportedSize: function(file) {
+        var deferred = jQuery.Deferred();
+        if (!this.forceSupportedDimensions) deferred.resolve(true);
+        var that = this;
+        this._getImageSize(file).then(function(result) {
+            if (!result.success) { 
+                deferred.resolve(false); 
+            }
+            else {
+                var isGood = _.any(that.supportedDimensions, function(i) {
+                    return (result.x === i[0] && result.y === i[1]);
+                });
+                deferred.resolve(isGood);
+            }
+        });
+        return deferred.promise();
+    },
+    
+    _getImageSize: function(file) {
+        var _URL = window.URL || window.webkitURL;
+        var deferred = jQuery.Deferred();
+        var image = new Image();
+        
+        image.onload = function() {
+            deferred.resolve({success: true, x: image.width, y: image.height});
+        };
+        
+        image.onerror = function() {
+          deferred.resolve({success: false, x: 0, y: 0 });
+        };
+        
+        image.src = _URL.createObjectURL(file);
+        return deferred.promise();
+    },
+    
     /**
      * A function to set up a drop area for drag-and-drop file uploads
     */
     setupDrop: function() {
       var uploadBorder = this.$.UploadBorder;
-      
-      this.isSupportedSize = function(file) {
-        if (!this.forceSupportedDimensions) return true;
-        var imageSize = this.getImageSize(file);
-        return _.any(this.supportedDimensions, function(i) { return imageSize.x == i[0] && imageSize.y == i[1]; });
-      }
       
       this.getImageSize = function(file) {
         var _URL = window.URL || window.webkitURL;
@@ -381,7 +420,7 @@ Example:
         };
         
         image.src = _URL.createObjectURL(file);
-        while (!finished) {}
+        // while (!finished) {}
         return error ? {x: 0, y: 0} : { x: image.width, y: image.height };
       }
       
@@ -407,7 +446,7 @@ Example:
           
           // Check if multiple upload is allowed
           if (!this.multi && this.files.length !== 0) {
-            return;
+            continue;
           }
           
           // Check if file has already been uploaded
@@ -416,25 +455,28 @@ Example:
             continue;
           }
           
-          //Check if the file isSupportedSize
-          if (!this.isSupportedSize(file)) {
-            this.fire('image-size-unsupported-error', file);
-            continue;
-          }
-          
           // Check if filetype is accepted
           var mimeType = ((file.type !== '') ? file.type.match(/^[^\/]*\//)[0] : null);
           var fileType = file.name.match(/\.[^\.]*$/)[0];
           if (this.accept !== '' && !(this.accept.indexOf(mimeType) > -1 || this.accept.indexOf(fileType) > -1)) {
-            return;
+            continue;
           }
           
           file.progress = 0;
           file.error = false;
           file.complete = false;
-          this.push("files", file);
-          this.uploadFile(file);
+          var that = this;
+          this._isSupportedSize(file).then(function(isGood) {
+              if (!isGood) {
+                  that.fire('image-size-unsupported-error', file);
+              }
+              else {
+                  that._addAndUploadFile(file);
+              }
+          });
+
         }
+        
       }
     },
     
@@ -484,15 +526,18 @@ Example:
         file.progress = 0;
         file.error = false;
         file.complete = false;
-        //Check if the file isSupportedSize
-        if (!this.isSupportedSize(file)) {
-          this.fire('image-size-unsupported-error', file);
-          continue;
-        }
+
         
         if (!this._fileExists(file)) {
-            this.push("files", file);
-            this.uploadFile(file);
+            var that = this;
+            this._isSupportedSize(file).then(function(isGood) {
+                if (!isGood) {
+                    that.fire('image-size-unsupported-error', file);
+                }
+                else {
+                    that._addAndUploadFile(file);
+                }
+            });
         } else {
             this.fire('duplicate-file-error', file);
             continue;
