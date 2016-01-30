@@ -365,6 +365,7 @@ Example:
       }
       
       this.getImageSize = function(file) {
+        var _URL = window.URL || window.webkitURL;
         var image = new Image();
         var finished = false;
         var error = false;
