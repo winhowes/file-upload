@@ -364,17 +364,17 @@ Example:
     
     _isSupportedSize: function(file) {
         var deferred = jQuery.Deferred();
-        if (!this.forceSupportedDimensions) deferred.resolve(true);
+        if (!this.forceSupportedDimensions) deferred.resolve({success: isGood, file: file });
         var that = this;
         this._getImageSize(file).then(function(result) {
             if (!result.success) { 
-                deferred.resolve(false); 
+                deferred.resolve({success: false, file: file }); 
             }
             else {
                 var isGood = _.any(that.supportedDimensions, function(i) {
                     return (result.x === i[0] && result.y === i[1]);
                 });
-                deferred.resolve(isGood);
+                deferred.resolve({success: isGood, file: file });
             }
         });
         return deferred.promise();
@@ -466,12 +466,12 @@ Example:
           file.error = false;
           file.complete = false;
           var that = this;
-          this._isSupportedSize(file).then(function(isGood) {
-              if (!isGood) {
-                  that.fire('image-size-unsupported-error', file);
+          this._isSupportedSize(file).then(function(result) {
+              if (!result.success) {
+                  that.fire('image-size-unsupported-error', result.file);
               }
               else {
-                  that._addAndUploadFile(file);
+                  that._addAndUploadFile(result.file);
               }
           });
 
@@ -530,12 +530,12 @@ Example:
         
         if (!this._fileExists(file)) {
             var that = this;
-            this._isSupportedSize(file).then(function(isGood) {
-                if (!isGood) {
-                    that.fire('image-size-unsupported-error', file);
+            this._isSupportedSize(file).then(function(result) {
+                if (!result.success) {
+                    that.fire('image-size-unsupported-error', result.file);
                 }
                 else {
-                    that._addAndUploadFile(file);
+                    that._addAndUploadFile(result.file);
                 }
             });
         } else {
