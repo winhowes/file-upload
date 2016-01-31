@@ -18,7 +18,6 @@ Example:
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-progress/paper-progress.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
-<script src="../jQuery/dist/jquery.js"></script>
 
 <dom-module id="file-upload">
 
@@ -363,38 +362,42 @@ Example:
     },
     
     _isSupportedSize: function(file) {
-        var deferred = jQuery.Deferred();
-        if (!this.forceSupportedDimensions) deferred.resolve({success: isGood, file: file });
-        var that = this;
-        this._getImageSize(file).then(function(result) {
-            if (!result.success) { 
-                deferred.resolve({success: false, file: file }); 
-            }
-            else {
-                var isGood = _.any(that.supportedDimensions, function(i) {
-                    return (result.x === i[0] && result.y === i[1]);
-                });
-                deferred.resolve({success: isGood, file: file });
-            }
+        var self = this;
+        
+        return new Promise(function(resolve, reject) {
+             if (!self.forceSupportedDimensions) resolve({success: true, file: file });
+             self._getImageSize(file).then(function(result) {
+                 if (!result.success) {
+                     reject({success: false, file: file }); 
+                 } else {
+                     var isGood = _.any(self.supportedDimensions, function(i) {
+                        return (result.x === i[0] && result.y === i[1]);
+                     });
+                     if (isGood) {
+                        resolve({success: true, file: file });
+                     } else {
+                        reject({success: false, file: file })  
+                     }
+                 }
+             });
         });
-        return deferred.promise();
     },
     
     _getImageSize: function(file) {
-        var _URL = window.URL || window.webkitURL;
-        var deferred = jQuery.Deferred();
-        var image = new Image();
-        
-        image.onload = function() {
-            deferred.resolve({success: true, x: image.width, y: image.height});
-        };
-        
-        image.onerror = function() {
-          deferred.resolve({success: false, x: 0, y: 0 });
-        };
-        
-        image.src = _URL.createObjectURL(file);
-        return deferred.promise();
+        return new Promise(function(resolve, reject) {
+            var _URL = window.URL || window.webkitURL;
+            var image = new Image();
+            
+            image.onload = function() {
+                resolve({success: true, x: image.width, y: image.height});
+            };
+            
+            image.onerror = function() {
+                reject({success: false, x: 0, y: 0 });
+            };
+            
+            image.src = _URL.createObjectURL(file);
+        });
     },
     
     /**
@@ -446,12 +449,9 @@ Example:
           file.complete = false;
           var that = this;
           this._isSupportedSize(file).then(function(result) {
-              if (!result.success) {
-                  that.fire('image-size-unsupported-error', result.file);
-              }
-              else {
-                  that._addAndUploadFile(result.file);
-              }
+            that._addAndUploadFile(result.file);
+          }, function(result) {
+            that.fire('image-size-unsupported-error', result.file);
           });
 
         }
@@ -509,12 +509,9 @@ Example:
         if (!this._fileExists(file)) {
             var that = this;
             this._isSupportedSize(file).then(function(result) {
-                if (!result.success) {
-                    that.fire('image-size-unsupported-error', result.file);
-                }
-                else {
-                    that._addAndUploadFile(result.file);
-                }
+                that._addAndUploadFile(result.file);
+            }, function(result) {
+                that.fire('image-size-unsupported-error', result.file);
             });
         } else {
             this.fire('duplicate-file-error', file);
