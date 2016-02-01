@@ -18,7 +18,6 @@ Example:
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-progress/paper-progress.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
-<script src="../jQuery/dist/jquery.js"></script>
 
 <dom-module id="file-upload">
 
@@ -82,7 +81,7 @@ Example:
     .error {
       color: #f40303;
       font-size: 11px;
-      margin: 2px 0px -3px;
+      margin: 2px 0px 0px;
       @apply(--file-upload-error);
     }
 
@@ -410,18 +409,18 @@ Example:
       this.toggleClass("enabled", true, uploadBorder);
       var t = this;
       
-      window.ondragover = function(e) {
+      t.ondragover = function(e) {
         e.stopPropagation();
         t.toggleClass("hover", true, uploadBorder);
         return false;
       }
       
-      window.ondragleave = function() {
+      t.ondragleave = function() {
         t.toggleClass("hover", false, uploadBorder);
         return false;
       }
       
-      window.ondrop = function(event) {
+      t.ondrop = function(event) {
         t.toggleClass("hover", false, uploadBorder);
         event.preventDefault();
         var length = event.dataTransfer.files.length;
@@ -604,7 +603,8 @@ Example:
       var xhr = file.xhr = new XMLHttpRequest();
 
       xhr.upload.onprogress = function(e) {
-        var done = e.loaded, total = e.total;
+        var done = e.loaded; 
+        var total = e.total;
         self.set(prefix + ".progress", Math.floor((done/total)*1000)/10);
       };
 
@@ -618,7 +618,9 @@ Example:
       xhr.onload = function(e) {
         if (xhr.status === 200) {
           self.fire("success", {xhr: xhr});
+          self.set(prefix + ".progress", 100);
           self.set(prefix + ".complete", true);
+          self.updateStyles();
         } else {
           self.set(prefix + ".error", true);
           self.set(prefix + ".complete", false);
