@@ -107,7 +107,7 @@ Example:
       <div id='UploadBorder'>
         <div id="dropArea" hidden$="{{!_shownDropText}}">{{dropText}}</div>
         <template is="dom-repeat" items="{{files}}">
-          <div class="file">
+          <div class="pad file">
             <div class="name">
               <span>{{item.name}}</span>
               <div class="commands">
@@ -119,7 +119,7 @@ Example:
             </div>
             <div class="error" hidden$="{{!item.error}}">{{errorText}}</div>
             <div hidden$={{progressHidden}}>
-              <paper-progress value$="{{item.progress}}" error$="{{item.error}}"></paper-progress>
+              <paper-progress style="width: 100%;" value$="{{item.progress}}" error$="{{item.error}}"></paper-progress>
             </div>
           </div>
         </template>
