@@ -18,6 +18,7 @@ Example:
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-progress/paper-progress.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
+<script src="../jQuery/dist/jquery.js"></script>
 
 <dom-module id="file-upload">
 
@@ -407,51 +408,51 @@ Example:
       var uploadBorder = this.$.UploadBorder;
       
       this.toggleClass("enabled", true, uploadBorder);
+      var t = this;
       
-      this.ondragover = function(e) {
+      window.ondragover = function(e) {
         e.stopPropagation();
-        this.toggleClass("hover", true, uploadBorder);
+        t.toggleClass("hover", true, uploadBorder);
         return false;
       }
       
-      this.ondragleave = function() {
-        this.toggleClass("hover", false, uploadBorder);
+      window.ondragleave = function() {
+        t.toggleClass("hover", false, uploadBorder);
         return false;
       }
       
-      this.ondrop = function(event) {
-        this.toggleClass("hover", false, uploadBorder);
+      window.ondrop = function(event) {
+        t.toggleClass("hover", false, uploadBorder);
         event.preventDefault();
         var length = event.dataTransfer.files.length;
         for (var i = 0; i < length; i++) {
           var file = event.dataTransfer.files[i];
           
           // Check if multiple upload is allowed
-          if (!this.multi && this.files.length !== 0) {
+          if (!t.multi && t.files.length !== 0) {
             continue;
           }
           
           // Check if file has already been uploaded
-          if (this._fileExists(file)) {
-            this.fire('duplicate-file-error', file);
+          if (t._fileExists(file)) {
+            t.fire('duplicate-file-error', file);
             continue;
           }
           
           // Check if filetype is accepted
           var mimeType = ((file.type !== '') ? file.type.match(/^[^\/]*\//)[0] : null);
           var fileType = file.name.match(/\.[^\.]*$/)[0];
-          if (this.accept !== '' && !(this.accept.indexOf(mimeType) > -1 || this.accept.indexOf(fileType) > -1)) {
+          if (t.accept !== '' && !(t.accept.indexOf(mimeType) > -1 || t.accept.indexOf(fileType) > -1)) {
             continue;
           }
           
           file.progress = 0;
           file.error = false;
           file.complete = false;
-          var that = this;
-          this._isSupportedSize(file).then(function(result) {
-            that._addAndUploadFile(result.file);
+          t._isSupportedSize(file).then(function(result) {
+            t._addAndUploadFile(result.file);
           }, function(result) {
-            that.fire('image-size-unsupported-error', result.file);
+            t.fire('image-size-unsupported-error', result.file);
           });
 
         }
