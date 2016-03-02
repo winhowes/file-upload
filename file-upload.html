@@ -329,7 +329,17 @@ Example:
       _shownDropText: {
         type: Boolean,
         value: false
+      },
+      
+      /**
+       * `withCredentials` indicates whether or not use withCredentials on upload
+      */
+      withCredentials: {
+          type: Boolean,
+          value: false,
+          notify: true
       }
+      
     },
 
     /**
@@ -601,7 +611,8 @@ Example:
       formData.append("file", file, file.name);
 
       var xhr = file.xhr = new XMLHttpRequest();
-
+      xhr.withCredentials = this.withCredentials;
+      
       xhr.upload.onprogress = function(e) {
         var done = e.loaded; 
         var total = e.total;
