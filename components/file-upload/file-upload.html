@@ -17,7 +17,7 @@ Example:
 
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-progress/paper-progress.html">
-  <link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
 
 <dom-module id="file-upload">
 
@@ -81,7 +81,7 @@ Example:
     .error {
       color: #f40303;
       font-size: 11px;
-      margin: 2px 0px -3px;
+      margin: 2px 0px 0px;
       @apply(--file-upload-error);
     }
 
@@ -97,23 +97,29 @@ Example:
   <template>
     <div>
       <paper-button id="button" icon="file-upload" class="blue" on-click="_fileClick">
+        <iron-icon icon="file-upload"></iron-icon>
+        <content></content>
+      </paper-button>
+      <paper-button id="deletebutton" icon="delete" class="blue" on-click="clear" hidden$="{{!hasFiles}}">
+        <iron-icon icon="delete"></iron-icon>
         <content></content>
       </paper-button>
       <div id='UploadBorder'>
         <div id="dropArea" hidden$="{{!_shownDropText}}">{{dropText}}</div>
         <template is="dom-repeat" items="{{files}}">
-          <div class="file">
+          <div class="pad file">
             <div class="name">
               <span>{{item.name}}</span>
               <div class="commands">
                 <iron-icon icon="autorenew" title="{{retryText}}" on-click="_retryUpload" hidden$="{{!item.error}}"></iron-icon>
                 <iron-icon icon="cancel" title="{{removeText}}" on-click="_cancelUpload" hidden$="{{item.complete}}"></iron-icon>
+                <iron-icon icon="delete" title="{{deleteText}}" on-click="_deleteUpload" hidden$="{{!item.complete}}"></iron-icon>
                 <iron-icon icon="check-circle" title="{{successText}}" hidden$="{{!item.complete}}"></iron-icon>
               </div>
             </div>
             <div class="error" hidden$="{{!item.error}}">{{errorText}}</div>
             <div hidden$={{progressHidden}}>
-              <paper-progress value$="{{item.progress}}" error$="{{item.error}}"></paper-progress>
+              <paper-progress style="width: 100%;" value$="{{item.progress}}" error$="{{item.error}}"></paper-progress>
             </div>
           </div>
         </template>
@@ -209,7 +215,17 @@ Example:
         type: Array,
         value: function() {
             return [];
-        }
+        },
+        notify: true
+      },
+
+      /**
+       * `hasFiles` indicates if there are any files uploaded
+       */
+      hasFiles: {
+        type: Boolean,
+        value: false,
+        notify: true  
       },
 
       /**
@@ -253,6 +269,14 @@ Example:
       },
 
       /**
+       * `deleteText` is the text for the tooltip to delete an upload
+       */
+      deleteText: {
+          type: String,
+          value: 'Delete'
+      },
+
+      /**
        * `removeText` is the text for the tooltip to remove an upload
       */
       removeText: {
@@ -275,14 +299,47 @@ Example:
           type: String,
           value: 'Error uploading file...'
       },
-
+      
+      /**
+       * `forceSupportedDimensions` flag to test for supported dimensions
+       */
+      forceSupportedDimensions: {
+        type: Boolean,
+        notify: true,
+        value: false
+      },
+      
+      /**
+       * `supportedDimensions` is an array of image sizes supported
+       */
+      supportedDimensions: {
+        type: Array,
+        notify: true,
+        value: [
+          [640,480],
+          [800,600],
+          [1024,768],
+          [120,120]
+        ]
+      },
+      
       /**
        * `_shownDropText` indicates whether or not the drop text should be shown
       */
       _shownDropText: {
         type: Boolean,
         value: false
+      },
+      
+      /**
+       * `withCredentials` indicates whether or not use withCredentials on upload
+      */
+      withCredentials: {
+          type: Boolean,
+          value: false,
+          notify: true
       }
+      
     },
 
     /**
@@ -305,51 +362,135 @@ Example:
         this.setupDrop();
       }
     },
-
+    
+    /**
+     * Add file to list and upload it
+     */
+    _addAndUploadFile: function(file) {
+        this.push("files", file);
+        this.uploadFile(file);
+    },
+    
+    _isSupportedSize: function(file) {
+        var self = this;
+        
+        return new Promise(function(resolve, reject) {
+             if (!self.forceSupportedDimensions) resolve({success: true, file: file });
+             self._getImageSize(file).then(function(result) {
+                 if (!result.success) {
+                     reject({success: false, file: file }); 
+                 } else {
+                     var isGood = _.any(self.supportedDimensions, function(i) {
+                        return (result.x === i[0] && result.y === i[1]);
+                     });
+                     if (isGood) {
+                        resolve({success: true, file: file });
+                     } else {
+                        reject({success: false, file: file })  
+                     }
+                 }
+             });
+        });
+    },
+    
+    _getImageSize: function(file) {
+        return new Promise(function(resolve, reject) {
+            var _URL = window.URL || window.webkitURL;
+            var image = new Image();
+            
+            image.onload = function() {
+                resolve({success: true, x: image.width, y: image.height});
+            };
+            
+            image.onerror = function() {
+                reject({success: false, x: 0, y: 0 });
+            };
+            
+            image.src = _URL.createObjectURL(file);
+        });
+    },
+    
     /**
      * A function to set up a drop area for drag-and-drop file uploads
     */
     setupDrop: function() {
       var uploadBorder = this.$.UploadBorder;
+      
       this.toggleClass("enabled", true, uploadBorder);
-
-      this.ondragover = function(e) {
+      var t = this;
+      
+      t.ondragover = function(e) {
         e.stopPropagation();
-        this.toggleClass("hover", true, uploadBorder);
+        t.toggleClass("hover", true, uploadBorder);
         return false;
       }
-
-      this.ondragleave = function() {
-        this.toggleClass("hover", false, uploadBorder);
+      
+      t.ondragleave = function() {
+        t.toggleClass("hover", false, uploadBorder);
         return false;
       }
-
-      this.ondrop = function(event) {
-        this.toggleClass("hover", false, uploadBorder);
+      
+      t.ondrop = function(event) {
+        t.toggleClass("hover", false, uploadBorder);
         event.preventDefault();
         var length = event.dataTransfer.files.length;
         for (var i = 0; i < length; i++) {
           var file = event.dataTransfer.files[i];
-
+          
           // Check if multiple upload is allowed
-          if (!this.multi && this.files.length !== 0) {
-            return;
+          if (!t.multi && t.files.length !== 0) {
+            continue;
           }
-
+          
+          // Check if file has already been uploaded
+          if (t._fileExists(file)) {
+            t.fire('duplicate-file-error', file);
+            continue;
+          }
+          
           // Check if filetype is accepted
           var mimeType = ((file.type !== '') ? file.type.match(/^[^\/]*\//)[0] : null);
           var fileType = file.name.match(/\.[^\.]*$/)[0];
-          if (this.accept !== '' && !(this.accept.indexOf(mimeType) > -1 || this.accept.indexOf(fileType) > -1)) {
-            return;
+          if (t.accept !== '' && !(t.accept.indexOf(mimeType) > -1 || t.accept.indexOf(fileType) > -1)) {
+            continue;
           }
-
+          
           file.progress = 0;
           file.error = false;
           file.complete = false;
-          this.push("files", file);
-          this.uploadFile(file);
+          t._isSupportedSize(file).then(function(result) {
+            t._addAndUploadFile(result.file);
+          }, function(result) {
+            t.fire('image-size-unsupported-error', result.file);
+          });
+
         }
+        
       }
+    },
+    
+    /**
+     * observers
+     */
+    observers: [
+        '_filesChanged(files.*)'
+    ],
+    
+    /**
+     * Update the hasFiles flag
+     */
+    _filesChanged: function(e) {
+        this.hasFiles = (this.files.length > 0);
+    },
+    
+    /**
+     * Checks if file exists
+     */
+    _fileExists: function(file) {
+        for (var i = 0; i < this.files.length; i++) {
+            if (this.files[i].name === file.name) return true;
+        }
+        return false;
     },
 
     /**
@@ -374,8 +515,18 @@ Example:
         file.progress = 0;
         file.error = false;
         file.complete = false;
-        this.push("files", file);
-        this.uploadFile(file);
+        
+        if (!this._fileExists(file)) {
+            var that = this;
+            this._isSupportedSize(file).then(function(result) {
+                that._addAndUploadFile(result.file);
+            }, function(result) {
+                that.fire('image-size-unsupported-error', result.file);
+            });
+        } else {
+            this.fire('duplicate-file-error', file);
+            continue;
+        }
       }
     },
 
@@ -393,12 +544,31 @@ Example:
     },
 
     /**
+     * Remove the specified file
+     * 
+     * @param {object} a file, an element of the files array
+     */
+    remove: function(file) {
+        this.splice("files", this.files.indexOf(file), 1);
+        this._showDropText();
+    },
+    
+    /**
      * Cancels the file upload
      *
      * @param {object}, an event object
     */
     _cancelUpload: function(e) {
       this.cancel(e.model.__data__.item);
+    },
+
+    /**
+     * Delete the file upload
+     * 
+     * @param {object}, an event object
+     */
+    _deleteUpload: function(e) {
+      this.remove(e.model.__data__.item);
     },
 
     /**
@@ -441,9 +611,11 @@ Example:
       formData.append("file", file, file.name);
 
       var xhr = file.xhr = new XMLHttpRequest();
-
+      xhr.withCredentials = this.withCredentials;
+      
       xhr.upload.onprogress = function(e) {
-        var done = e.loaded, total = e.total;
+        var done = e.loaded; 
+        var total = e.total;
         self.set(prefix + ".progress", Math.floor((done/total)*1000)/10);
       };
 
@@ -457,7 +629,9 @@ Example:
       xhr.onload = function(e) {
         if (xhr.status === 200) {
           self.fire("success", {xhr: xhr});
+          self.set(prefix + ".progress", 100);
           self.set(prefix + ".complete", true);
+          self.updateStyles();
         } else {
           self.set(prefix + ".error", true);
           self.set(prefix + ".complete", false);

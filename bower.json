@@ -2,7 +2,8 @@
   "name": "file-upload",
   "version": "1.6.3",
   "authors": [
-    "Winston Howes <winstonhowes@gmail.com>"
+    "Winston Howes <winstonhowes@gmail.com>",
+    "Keith A. Hill <keith@dexs.ca>"
   ],
   "description": "An element for using ajax to upload files.",
   "keywords": [
