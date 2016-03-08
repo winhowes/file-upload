@@ -22,6 +22,10 @@ Example:
 <dom-module id="file-upload">
 
   <style type="text/css">
+    :host {
+        display: inline-block;
+    }
+    
     .enabled {
       border: 1px dashed #555;
       @apply(--file-upload-upload-border-enabled);
