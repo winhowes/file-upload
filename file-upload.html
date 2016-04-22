@@ -286,6 +286,13 @@ Example:
       _shownDropText: {
         type: Boolean,
         value: false
+      },
+       /**
+       * `additional` value object to send addition POST values along with file.
+      */
+      additional: {
+        type: Object,
+        value: {},
       }
     },
 
@@ -443,6 +450,16 @@ Example:
 
       var formData = new FormData();
       formData.append("file", file, file.name);
+
+       /*
+        Add additional data to send with the POST variable
+      */
+      var addData = this.additional;
+      for (var key in addData) {
+          if (addData.hasOwnProperty(key)) {
+            formData.append(key, addData[key]);
+          }
+      }
 
       var xhr = file.xhr = new XMLHttpRequest();
 
