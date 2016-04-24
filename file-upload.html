@@ -260,24 +260,24 @@ Example:
        * `removeText` is the text for the tooltip to remove an upload
       */
       removeText: {
-          type: String,
-          value: 'Remove'
+        type: String,
+        value: 'Remove'
       },
 
       /**
        * `successText` is the text for the tooltip of a successful upload
       */
       successText: {
-          type: String,
-          value: 'Success'
+        type: String,
+        value: 'Success'
       },
 
       /**
        * `errorText` is the text to display for a failed upload
       */
       errorText: {
-          type: String,
-          value: 'Error uploading file...'
+        type: String,
+        value: 'Error uploading file...'
       },
 
       /**
@@ -287,12 +287,21 @@ Example:
         type: Boolean,
         value: false
       },
-       /**
-       * `additional` value object to send addition POST values along with file.
+
+      /**
+       * `additional` object of key-pair values to send additional values along with file.
       */
       additional: {
         type: Object,
         value: {},
+      },
+
+      /**
+       * `manualUpload` indiciates that when a files is selected it will <b>NOT</b> be automatically uploaded. `uploadFile` will have to be called programmatically on the files to upload.
+      */
+      manualUpload: {
+        type: Boolean,
+        value: false
       }
     },
 
@@ -358,7 +367,9 @@ Example:
           file.error = false;
           file.complete = false;
           this.push("files", file);
-          this.uploadFile(file);
+          if (!this.manualUpload) {
+            this.uploadFile(file);
+          }
         }
       }
     },
@@ -386,7 +397,9 @@ Example:
         file.error = false;
         file.complete = false;
         this.push("files", file);
-        this.uploadFile(file);
+        if (!this.manualUpload) {
+          this.uploadFile(file);
+        }
       }
     },
 
