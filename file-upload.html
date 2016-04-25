@@ -491,7 +491,7 @@ Example:
         }
       }
       xhr.onload = function(e) {
-        if (xhr.status === 200) {
+        if (xhr.status >= 200 && xhr.status <= 206) {
           self.fire("success", {xhr: xhr});
           self.set(prefix + ".complete", true);
         } else {
