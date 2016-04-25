@@ -462,7 +462,6 @@ Example:
       var self = this;
 
       var formData = new FormData();
-      formData.append("file", file, file.name);
 
        /*
         Add additional data to send with the POST variable
@@ -473,6 +472,9 @@ Example:
             formData.append(key, addData[key]);
           }
       }
+
+      // Add the file data last to support POSTing to Amazon Web Services S3.
+      formData.append("file", file, file.name);
 
       var xhr = file.xhr = new XMLHttpRequest();
 
