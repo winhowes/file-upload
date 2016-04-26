@@ -15,7 +15,7 @@
   ],
   "main": "file-upload.html",
   "license": "MIT",
-  "homepage": "https://github.com/winhowes/file-upload/",
+  "homepage": "https://winhowes.github.io/file-upload/components/file-upload/",
   "ignore": [
     "/.*",
     "/test/",
