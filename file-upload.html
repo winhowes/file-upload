@@ -137,7 +137,7 @@ Example:
     is: 'file-upload',
 
      /**
-      * Fired when a response is received status code 200.
+      * Fired when a response is received status code 2XX.
       *
       * @event success
     */
@@ -491,7 +491,7 @@ Example:
         }
       }
       xhr.onload = function(e) {
-        if (xhr.status >= 200 && xhr.status <= 206) {
+        if (xhr.status >= 200 && xhr.status < 300) {
           self.fire("success", {xhr: xhr});
           self.set(prefix + ".complete", true);
         } else {
