@@ -536,8 +536,8 @@ Example:
      * @param {object} a file, an element of the files array
     */
     cancel: function(file) {
-      if (file && file.xhr) {
-        file.xhr.abort();
+      if (file) {
+        if (file.xhr) file.xhr.abort();
         this.splice("files", this.files.indexOf(file), 1);
         this._showDropText();
       }
