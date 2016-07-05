@@ -17,7 +17,7 @@ Example:
 
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-progress/paper-progress.html">
-  <link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="file-upload-icons.html">
 
 <dom-module id="file-upload">
 
@@ -100,7 +100,7 @@ Example:
 
   <template>
     <div>
-      <paper-button id="button" icon="file-upload" class="blue" on-click="_fileClick">
+      <paper-button id="button" icon="file-upload-icons:file-upload" class="blue" on-click="_fileClick">
         <content></content>
       </paper-button>
       <div id='UploadBorder'>
@@ -110,9 +110,9 @@ Example:
             <div class="name">
               <span>{{item.name}}</span>
               <div class="commands">
-                <iron-icon icon="autorenew" title="{{retryText}}" on-click="_retryUpload" hidden$="{{!item.error}}"></iron-icon>
-                <iron-icon icon="cancel" title="{{removeText}}" on-click="_cancelUpload" hidden$="{{item.complete}}"></iron-icon>
-                <iron-icon icon="check-circle" title="{{successText}}" hidden$="{{!item.complete}}"></iron-icon>
+                <iron-icon icon="file-upload-icons:autorenew" title="{{retryText}}" on-click="_retryUpload" hidden$="{{!item.error}}"></iron-icon>
+                <iron-icon icon="file-upload-icons:cancel" title="{{removeText}}" on-click="_cancelUpload" hidden$="{{item.complete}}"></iron-icon>
+                <iron-icon icon="file-upload-icons:check-circle" title="{{successText}}" hidden$="{{!item.complete}}"></iron-icon>
               </div>
             </div>
             <div class="error" hidden$="{{!item.error}}">{{errorText}}</div>
