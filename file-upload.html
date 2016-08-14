@@ -303,6 +303,14 @@ Example:
       manualUpload: {
         type: Boolean,
         value: false
+      },
+
+      /**
+       * `fileDataName` is the name for the file data in the `formData` object.
+      */
+      fileDataName: {
+        type: String,
+        value: 'file'
       }
     },
 
@@ -485,7 +493,7 @@ Example:
       }
 
       // Add the file data last to support POSTing to Amazon Web Services S3.
-      formData.append("file", file, file.name);
+      formData.append(this.fileDataName, file, file.name);
 
       var xhr = file.xhr = new XMLHttpRequest();
 
