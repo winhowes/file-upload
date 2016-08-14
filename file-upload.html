@@ -156,12 +156,12 @@ Example:
 
       /**
        * `target` is the target url to upload the files to.
-       * Additionally by adding "<name>" in your url, it will be replaced by
+       * Additionally by adding '<name>' in your url, it will be replaced by
        * the file name.
        */
       target: {
         type: String,
-        value: ""
+        value: ''
       },
 
       /**
@@ -171,7 +171,7 @@ Example:
 
       accept: {
         type: String,
-        value: ""
+        value: ''
       },
 
       /**
@@ -195,7 +195,7 @@ Example:
       */
       dropText: {
         type: String,
-        value: "Drop Files Here"
+        value: 'Drop Files Here'
       },
 
       /**
@@ -222,7 +222,7 @@ Example:
       */
       method: {
         type: String,
-        value: "PUT"
+        value: 'PUT'
       },
 
       /**
@@ -318,16 +318,17 @@ Example:
      * Clears the list of files
     */
     clear: function() {
-      this.set("files", []);
+      this.set('files', []);
+      this.$.fileInput.value = '';
       this._showDropText();
     },
 
     ready: function() {
       if (this.raised) {
-        this.toggleAttribute("raised", true, this.$.button);
+        this.toggleAttribute('raised', true, this.$.button);
       }
       if (this.noink) {
-        this.toggleAttribute("noink", true, this.$.button);
+        this.toggleAttribute('noink', true, this.$.button);
       }
       if (this.droppable) {
         this._showDropText();
@@ -340,11 +341,11 @@ Example:
     */
     setupDrop: function() {
       var uploadBorder = this.$.UploadBorder;
-      this.toggleClass("enabled", true, uploadBorder);
+      this.toggleClass('enabled', true, uploadBorder);
 
       this.ondragover = function(e) {
         e.stopPropagation();
-        this.toggleClass("hover", true, uploadBorder);
+        this.toggleClass('hover', true, uploadBorder);
 
         // Workaround for allowgin drop from Chome's download footer on OSX
         // See https://bugs.chromium.org/p/chromium/issues/detail?id=234931
@@ -359,12 +360,12 @@ Example:
       }
 
       this.ondragleave = function() {
-        this.toggleClass("hover", false, uploadBorder);
+        this.toggleClass('hover', false, uploadBorder);
         return false;
       }
 
       this.ondrop = function(event) {
-        this.toggleClass("hover", false, uploadBorder);
+        this.toggleClass('hover', false, uploadBorder);
         event.preventDefault();
         var length = event.dataTransfer.files.length;
         for (var i = 0; i < length; i++) {
@@ -385,7 +386,7 @@ Example:
           file.progress = 0;
           file.error = false;
           file.complete = false;
-          this.push("files", file);
+          this.push('files', file);
           if (!this.manualUpload) {
             this.uploadFile(file);
           }
@@ -399,8 +400,8 @@ Example:
     _fileClick: function() {
       var elem = this.$.fileInput;
       if (elem && document.createEvent) { // sanity check
-        var evt = document.createEvent("MouseEvents");
-        evt.initEvent("click", true, false);
+        var evt = document.createEvent('MouseEvents');
+        evt.initEvent('click', true, false);
         elem.dispatchEvent(evt);
       }
     },
@@ -415,7 +416,7 @@ Example:
         file.progress = 0;
         file.error = false;
         file.complete = false;
-        this.push("files", file);
+        this.push('files', file);
         if (!this.manualUpload) {
           this.uploadFile(file);
         }
@@ -430,7 +431,7 @@ Example:
     cancel: function(file) {
       if (file && file.xhr) {
         file.xhr.abort();
-        this.splice("files", this.files.indexOf(file), 1);
+        this.splice('files', this.files.indexOf(file), 1);
         this._showDropText();
       }
     },
@@ -450,8 +451,8 @@ Example:
      * @param {object}, an event object
     */
     _retryUpload: function(e) {
-      e.model.set("item.error", false);
-      e.model.set("item.progress", 0);
+      e.model.set('item.error', false);
+      e.model.set('item.progress', 0);
       // The async helps give visual feedback of a retry occurring, even though it's less efficient.
       var self = this;
       this.async(function() {
@@ -463,7 +464,7 @@ Example:
      * Whether or not to display the drop text
     */
     _showDropText: function() {
-      this.set("_shownDropText", (!this.files.length && this.droppable));
+      this.set('_shownDropText', (!this.files.length && this.droppable));
     },
 
     /**
@@ -477,7 +478,7 @@ Example:
       }
       this.fire('before-upload');
       this._showDropText();
-      var prefix = "files." + this.files.indexOf(file);
+      var prefix = 'files.' + this.files.indexOf(file);
       var self = this;
 
       var formData = new FormData();
@@ -499,10 +500,10 @@ Example:
 
       xhr.upload.onprogress = function(e) {
         var done = e.loaded, total = e.total;
-        self.set(prefix + ".progress", Math.floor((done/total)*1000)/10);
+        self.set(prefix + '.progress', Math.floor((done/total)*1000)/10);
       };
 
-      var url = this.target.replace("<name>", file.name);
+      var url = this.target.replace('<name>', file.name);
       xhr.open(this.method, url, true);
       for (key in this.headers) {
         if (this.headers.hasOwnProperty(key)) {
@@ -511,14 +512,14 @@ Example:
       }
       xhr.onload = function(e) {
         if (xhr.status >= 200 && xhr.status < 300) {
-          self.fire("success", {xhr: xhr});
-          self.set(prefix + ".complete", true);
+          self.fire('success', {xhr: xhr});
+          self.set(prefix + '.complete', true);
         } else {
-          self.set(prefix + ".error", true);
-          self.set(prefix + ".complete", false);
-          self.set(prefix + ".progress", 100);
+          self.set(prefix + '.error', true);
+          self.set(prefix + '.complete', false);
+          self.set(prefix + '.progress', 100);
           self.updateStyles();
-          self.fire("error", {xhr:xhr});
+          self.fire('error', {xhr:xhr});
         }
       };
       xhr.send(formData);
