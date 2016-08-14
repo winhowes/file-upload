@@ -30,7 +30,7 @@ This code may only be used under the MIT license found at https://github.com/win
         });
 
         test('defines the "dropText" property', function() {
-          assert.equal(myEl.dropText, "Drop Files Here");
+          assert.equal(myEl.dropText, 'Drop Files Here');
         });
 
         test('defines the "files" property', function() {
@@ -62,7 +62,51 @@ This code may only be used under the MIT license found at https://github.com/win
         });
 
         test('defines the "target" property', function() {
-          assert.equal(myEl.target, "/test");
+          assert.equal(myEl.target, '/test');
+        });
+
+        test('defines the "method" property', function() {
+          assert.equal(myEl.method, 'PUT');
+        });
+
+        test('defines the "retryText" property', function() {
+          assert.equal(myEl.retryText, 'Retry Upload');
+        });
+
+        test('defines the "removeText" property', function() {
+          assert.equal(myEl.removeText, 'Remove');
+        });
+
+        test('defines the "successText" property', function() {
+          assert.equal(myEl.successText, 'Success');
+        });
+
+        test('defines the "errorText" property', function() {
+          assert.equal(myEl.errorText, 'Error uploading file...');
+        });
+
+        test('defines the "_shownDropText" property', function() {
+          assert.equal(myEl._shownDropText, false);
+        });
+
+        test('defines the "additional" property', function() {
+          assert.deepEqual(myEl.additional, {});
+        });
+
+        test('defines the "manualUpload" property', function() {
+          assert.equal(myEl.manualUpload, false);
+        });
+
+        test('defines the "fileDataName" property', function() {
+          assert.equal(myEl.fileDataName, 'file');
+        });
+
+        test('defines the "paperButtonAlt" property', function() {
+          assert.equal(myEl.paperButtonAlt, '');
+        });
+
+        test('defines the "paperButtonTitle" property', function() {
+          assert.equal(myEl.paperButtonTitle, '');
         });
 
       });
