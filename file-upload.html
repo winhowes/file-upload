@@ -337,6 +337,16 @@ Example:
       this.ondragover = function(e) {
         e.stopPropagation();
         this.toggleClass("hover", true, uploadBorder);
+
+        // Workaround for allowgin drop from Chome's download footer on OSX
+        // See https://bugs.chromium.org/p/chromium/issues/detail?id=234931
+        var effect = e.dataTransfer && e.dataTransfer.dropEffect;
+        var effectAllowed = e.dataTransfer && e.dataTransfer.effectAllowed;
+        if (effect === 'none' && effectAllowed !== 'none') {
+          e.dataTransfer.dropEffect = effectAllowed === 'move' ? 'move' : 'copy'
+        }
+        // end of workaround
+
         return false;
       }
 
