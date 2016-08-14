@@ -100,7 +100,7 @@ Example:
 
   <template>
     <div>
-      <paper-button id="button" icon="file-upload-icons:file-upload" class="blue" on-click="_fileClick">
+      <paper-button id="button" icon="file-upload-icons:file-upload" class="blue" on-click="_fileClick" alt="{{paperButtonAlt}}" title="{{paperButtonTitle}}">
         <content></content>
       </paper-button>
       <div id='UploadBorder'>
@@ -311,6 +311,22 @@ Example:
       fileDataName: {
         type: String,
         value: 'file'
+      },
+
+      /**
+       * `paperButtonAlt` allows changing the alt property on the paper button
+      */
+      paperButtonAlt: {
+        type: String,
+        value: ''
+      },
+
+      /**
+       * `paperButtonTitle` allows changing the title property on the paper button
+      */
+      paperButtonTitle: {
+        type: String,
+        value: ''
       }
     },
 
