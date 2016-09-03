@@ -424,6 +424,8 @@ Example:
 
     /**
      * Called whenever the list of selected files changes
+     *
+     * @param {object} e An event object
     */
     _fileChange: function(e) {
       var length = e.target.files.length;
@@ -442,7 +444,7 @@ Example:
     /**
      * Cancels the file upload for a specific file
      *
-     * @param {object} a file, an element of the files array
+     * @param {object} file An element of the files array
     */
     cancel: function(file) {
       if (file && file.xhr) {
@@ -455,7 +457,7 @@ Example:
     /**
      * Cancels the file upload
      *
-     * @param {object}, an event object
+     * @param {object} e An event object
     */
     _cancelUpload: function(e) {
       this.cancel(e.model.__data__.item);
@@ -464,7 +466,7 @@ Example:
     /**
      * Retries to upload the file
      *
-     * @param {object}, an event object
+     * @param {object} e An event object
     */
     _retryUpload: function(e) {
       e.model.set('item.error', false);
@@ -486,7 +488,7 @@ Example:
     /**
      * Uploads a file
      *
-     * @param {object} a file, an element of the files array
+     * @param {object} file An element of the files array
     */
     uploadFile: function(file) {
       if (!file) {
