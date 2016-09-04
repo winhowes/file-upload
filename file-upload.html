@@ -85,8 +85,12 @@ Example:
     .error {
       color: #f40303;
       font-size: 11px;
-      margin: 2px 0px 0px;
+      margin-top: 2px;
       @apply(--file-upload-error);
+    }
+
+    .progress-bar {
+      margin-top: 2px;
     }
 
     paper-progress {
@@ -116,7 +120,7 @@ Example:
               </div>
             </div>
             <div class="error" hidden$="{{!item.error}}">{{errorText}}</div>
-            <div hidden$={{progressHidden}}>
+            <div class="progress-bar" hidden$={{progressHidden}}>
               <paper-progress value$="{{item.progress}}" error$="{{item.error}}"></paper-progress>
             </div>
           </div>
