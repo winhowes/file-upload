@@ -140,21 +140,21 @@ Example:
 
     is: 'file-upload',
 
-     /**
-      * Fired when a response is received status code 2XX.
-      *
-      * @event success
-    */
-     /**
-      * Fired when a response is received other status code.
-      *
-      * @event error
-    */
+    /**
+     * Fired when a response is received status code 2XX.
+     *
+     * @event success
+     */
+    /**
+     * Fired when a response is received other status code.
+     *
+     * @event error
+     */
     /**
      * Fired when a file is about to be uploaded.
      *
      * @event before-upload
-   */
+     */
 
     properties: {
 
@@ -171,8 +171,7 @@ Example:
       /**
        * `accept` is the set of comma separated file extensions or mime types
        * to filter as accepted.
-      */
-
+       */
       accept: {
         type: String,
         value: ''
@@ -188,7 +187,7 @@ Example:
 
       /**
        * `droppable` indicates whether or not to allow file drop.
-      */
+       */
       droppable: {
         type: Boolean,
         value: false
@@ -196,7 +195,7 @@ Example:
 
       /**
        * `dropText` is the  text to display in the file drop area.
-      */
+       */
       dropText: {
         type: String,
         value: 'Drop Files Here'
@@ -204,7 +203,7 @@ Example:
 
       /**
        * `multi` indicates whether or not to allow multiple files to be uploaded.
-      */
+       */
       multi: {
         type: Boolean,
         value: false
@@ -212,7 +211,7 @@ Example:
 
       /**
        * `files` is the list of files to be uploaded
-      */
+       */
       files: {
         type: Array,
         notify: true,
@@ -223,7 +222,7 @@ Example:
 
       /**
        * `method` is the http method to be used during upload
-      */
+       */
       method: {
         type: String,
         value: 'PUT'
@@ -231,7 +230,7 @@ Example:
 
       /**
        * `withCredentials` indicates whether or not use xhr's withCredentials on upload
-      */
+       */
       withCredentials: {
         type: Boolean,
         value: false
@@ -239,7 +238,7 @@ Example:
 
       /**
        * `raised` indicates whether or not the button should be raised
-      */
+        */
       raised: {
         type: Boolean,
         value: false
@@ -247,7 +246,7 @@ Example:
 
       /**
        * `noink` indicates that the button should not have an ink effect
-      */
+       */
       noink: {
         type: Boolean,
         value: false
@@ -255,7 +254,7 @@ Example:
 
       /**
        * `headers` is a key value map of header names and values
-      */
+       */
       headers: {
         type: Object,
         value: {},
@@ -263,7 +262,7 @@ Example:
 
       /**
        * `retryText` is the text for the tooltip to retry an upload
-      */
+       */
       retryText: {
         type: String,
         value: 'Retry Upload'
@@ -271,7 +270,7 @@ Example:
 
       /**
        * `removeText` is the text for the tooltip to remove an upload
-      */
+       */
       removeText: {
         type: String,
         value: 'Remove'
@@ -279,7 +278,7 @@ Example:
 
       /**
        * `successText` is the text for the tooltip of a successful upload
-      */
+       */
       successText: {
         type: String,
         value: 'Success'
@@ -287,7 +286,7 @@ Example:
 
       /**
        * `errorText` is the text to display for a failed upload
-      */
+       */
       errorText: {
         type: String,
         value: 'Error uploading file...'
@@ -295,7 +294,7 @@ Example:
 
       /**
        * `_shownDropText` indicates whether or not the drop text should be shown
-      */
+       */
       _shownDropText: {
         type: Boolean,
         value: false
@@ -303,7 +302,7 @@ Example:
 
       /**
        * `additional` object of key-pair values to send additional values along with file.
-      */
+       */
       additional: {
         type: Object,
         value: {},
@@ -311,7 +310,7 @@ Example:
 
       /**
        * `manualUpload` indiciates that when a file is selected it will <b>NOT</b> be automatically uploaded. `uploadFile` will have to be called programmatically on the files to upload.
-      */
+       */
       manualUpload: {
         type: Boolean,
         value: false
@@ -319,7 +318,7 @@ Example:
 
       /**
        * `fileDataName` is the name for the file data in the `formData` object.
-      */
+       */
       fileDataName: {
         type: String,
         value: 'file'
@@ -327,7 +326,7 @@ Example:
 
       /**
        * `paperButtonAlt` allows changing the alt property on the paper button
-      */
+       */
       paperButtonAlt: {
         type: String,
         value: ''
@@ -335,7 +334,7 @@ Example:
 
       /**
        * `paperButtonTitle` allows changing the title property on the paper button
-      */
+       */
       paperButtonTitle: {
         type: String,
         value: ''
@@ -344,7 +343,7 @@ Example:
 
     /**
      * Clears the list of files
-    */
+     */
     clear: function() {
       this.set('files', []);
       this.$.fileInput.value = '';
@@ -366,7 +365,7 @@ Example:
 
     /**
      * A function to set up a drop area for drag-and-drop file uploads
-    */
+     */
     setupDrop: function() {
       var uploadBorder = this.$.UploadBorder;
       this.toggleClass('enabled', true, uploadBorder);
@@ -425,7 +424,7 @@ Example:
 
     /**
      * Clicks the invisible file input
-    */
+     */
     _fileClick: function() {
       var elem = this.$.fileInput;
       if (elem && document.createEvent) { // sanity check
@@ -439,7 +438,7 @@ Example:
      * Called whenever the list of selected files changes
      *
      * @param {object} e An event object
-    */
+     */
     _fileChange: function(e) {
       var length = e.target.files.length;
       for (var i = 0; i < length; i++) {
@@ -458,7 +457,7 @@ Example:
      * Cancels the file upload for a specific file
      *
      * @param {object} file An element of the files array
-    */
+     */
     cancel: function(file) {
       if (file) {
         if (file.xhr) {
@@ -473,7 +472,7 @@ Example:
      * Cancels the file upload
      *
      * @param {object} e An event object
-    */
+     */
     _cancelUpload: function(e) {
       this.cancel(e.model.__data__.item);
     },
@@ -482,7 +481,7 @@ Example:
      * Retries to upload the file
      *
      * @param {object} e An event object
-    */
+     */
     _retryUpload: function(e) {
       e.model.set('item.error', false);
       e.model.set('item.progress', 0);
@@ -495,7 +494,7 @@ Example:
 
     /**
      * Whether or not to display the drop text
-    */
+     */
     _showDropText: function() {
       this.set('_shownDropText', (!this.files.length && this.droppable));
     },
@@ -504,7 +503,7 @@ Example:
      * Uploads a file
      *
      * @param {object} file An element of the files array
-    */
+     */
     uploadFile: function(file) {
       if (!file) {
         return;
@@ -516,9 +515,7 @@ Example:
 
       var formData = new FormData();
 
-       /*
-        Add additional data to send with the POST variable
-      */
+      // Add additional data to send with the POST variable
       var addData = this.additional;
       for (var key in addData) {
           if (addData.hasOwnProperty(key)) {
