@@ -105,7 +105,7 @@ Example:
   <template>
     <div>
       <paper-button id="button" icon="file-upload-icons:file-upload" class="blue" on-click="_fileClick" alt="{{paperButtonAlt}}" title="{{paperButtonTitle}}">
-        <content></content>
+        <content>{{paperButtonContent}}</content>
       </paper-button>
       <div id='UploadBorder'>
         <div id="dropArea" hidden$="{{!_shownDropText}}">{{dropText}}</div>
@@ -336,6 +336,14 @@ Example:
        * `paperButtonTitle` allows changing the title property on the paper button
        */
       paperButtonTitle: {
+        type: String,
+        value: ''
+      },
+
+      /**
+       * `paperButtonContent` allows changing the content on the paper button
+       */
+      paperButtonContent: {
         type: String,
         value: ''
       }
