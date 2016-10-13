@@ -441,12 +441,18 @@ Example:
      */
     _fileChange: function(e) {
       var length = e.target.files.length;
+    
       for (var i = 0; i < length; i++) {
         var file = e.target.files[i];
         file.progress = 0;
         file.error = false;
         file.complete = false;
-        this.push('files', file);
+        if (!this.multi){
+          this.set('files',[file]);
+        }
+        else{
+          this.push('files', file);
+        }
         if (!this.manualUpload) {
           this.uploadFile(file);
         }
