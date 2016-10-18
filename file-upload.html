@@ -107,7 +107,7 @@ Example:
       <paper-button id="button" icon="file-upload-icons:file-upload" class="blue" on-click="_fileClick" alt="{{paperButtonAlt}}" title="{{paperButtonTitle}}">
         <content></content>
       </paper-button>
-      <div id='UploadBorder' hidden$="{{!showFileList}}">
+      <div id='UploadBorder' hidden$="{{hideFileList}}">
         <div id="dropArea" hidden$="{{!_shownDropText}}">{{dropText}}</div>
         <template is="dom-repeat" items="{{files}}">
           <div class="file">
@@ -181,11 +181,10 @@ Example:
       /**
        * `showFileList` indicates whether or not the file list should be hidden.
        */
-      showFileList: {
+      hideFileList: {
         type: Boolean,
-        value: true
+        value: false
       },
-
 
       /**
        * `progressHidden` indicates whether or not the progress bar should be hidden.
