@@ -93,6 +93,10 @@ This code may only be used under the MIT license found at https://github.com/win
           assert.equal(myEl._shownDropText, false);
         });
 
+        test('defines the "hideFileList" property', function() {
+          assert.equal(myEl.hideFileList, false);
+        });
+
         test('defines the "additional" property', function() {
           assert.deepEqual(myEl.additional, {});
         });
