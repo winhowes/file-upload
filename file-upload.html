@@ -388,7 +388,7 @@ Example:
         var effect = e.dataTransfer && e.dataTransfer.dropEffect;
         var effectAllowed = e.dataTransfer && e.dataTransfer.effectAllowed;
         if (effect === 'none' && effectAllowed !== 'none') {
-          e.dataTransfer.dropEffect = effectAllowed === 'move' ? 'move' : 'copy'
+          e.dataTransfer.dropEffect = effectAllowed === 'move' ? 'move' : 'copy';
         }
         // end of workaround
 
@@ -546,7 +546,7 @@ Example:
 
       xhr.upload.onprogress = function(e) {
         var done = e.loaded, total = e.total;
-        self.set(prefix + '.progress', Math.floor((done/total)*1000)/10);
+        self.set(prefix + '.progress', Math.floor((done / total) * 1000) / 10);
       };
 
       var url = this.target.replace('<name>', file.name);
@@ -565,7 +565,7 @@ Example:
           self.set(prefix + '.complete', false);
           self.set(prefix + '.progress', 100);
           self.updateStyles();
-          self.fire('error', {xhr:xhr});
+          self.fire('error', {xhr: xhr});
         }
       };
       xhr.send(formData);
