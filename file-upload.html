@@ -24,6 +24,7 @@ Example:
   <style type="text/css">
     :host {
       display: inline-block;
+      --error-color: #f40303;
     }
 
     .enabled {
@@ -83,7 +84,7 @@ Example:
     }
 
     .error {
-      color: #f40303;
+      color: var(--error-color);
       font-size: 11px;
       margin-top: 2px;
       @apply(--file-upload-error);
@@ -98,7 +99,7 @@ Example:
     }
 
     paper-progress[error] {
-      --paper-progress-active-color: #f40303;
+      --paper-progress-active-color: var(--error-color);
     }
   </style>
 
