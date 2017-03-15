@@ -130,17 +130,19 @@ Example:
         }
         
         table {
-            border: 1px solid black;
             border-collapse: separate;
             border-spacing: 0 5px;
         }
         
-        table tr {
+        table tr td {
+            padding: 10px;
+            vertical-align: middle;
             border-bottom: 1px solid black;
         }
         
-        table tr td {
-            padding: 10px;
+        table thead tr td {
+            font-weight: bold;
+            color: var(--thead-color, #03a9f4);
         }
     </style>
 
