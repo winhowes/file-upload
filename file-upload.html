@@ -58,8 +58,13 @@ Example:
         }
         
         .img-grayscale.completed {
-            -webkit-filter: none;
-            filter: none;
+            -webkit-filter: grayscale(0%);
+            -webkit-transition: .5s ease-in-out;
+            -moz-filter: grayscale(0%);
+            -moz-transition: .5s ease-in-out;
+            -o-filter: grayscale(0%);
+            -o-transition: .5s ease-in-out;
+            filter: grayscale(0%);
         }
         
         #dropArea {
@@ -130,7 +135,7 @@ Example:
         <div id="dropArea" hidden$="{{!_shownDropText}}">{{dropText}}</div>
         <template is="dom-repeat" items="{{files}}">
           <div class="file">
-           <canvas-render file="{{item}}" class$="{{getClass(item.complete)}}"></canvas-render>
+           <canvas-render hidden$="{{thumbnailHidden}}" file="{{item}}" class$="{{getClass(item.complete)}}"></canvas-render>
             <div class="name">
               <span>{{item.name}}</span>
               <div class="commands">
@@ -209,6 +214,14 @@ Example:
              * `progressHidden` indicates whether or not the progress bar should be hidden.
              */
             progressHidden: {
+                type: Boolean,
+                value: false
+            },
+
+            /**
+             * `thumbnailHidden` indicates whether or not the image thumbnail should be hidden.
+             */
+            thumbnailHidden: {
                 type: Boolean,
                 value: false
             },
@@ -599,7 +612,7 @@ Example:
         // Change class based on upload completion (gray / colour) 
         getClass: function(completed) {
             if (completed) {
-                return '';
+                return 'img-grayscale completed';
             } else {
                 return 'img-grayscale'
             }
