@@ -1,0 +1,43 @@
+<dom-module id="canvas-render">
+    <style>
+
+    </style>
+    <template>
+         <canvas id="canvas" width="{{width}}" height="{{height}}"></canvas>
+    </template>
+</dom-module>
+<script>
+    Polymer({
+        is: 'canvas-render',
+        properties: {
+            width: 100,
+            height: 100,
+            background: 'white',
+            color: 'black',
+            file: Object,
+            size: 100,
+            uploaded: false
+        },
+
+        attached: function() {
+            console.log(this.file);
+            var canvas = this.$.canvas;
+            var ctx = canvas.getContext('2d');
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                var img = new Image();
+                img.onload = function() {
+                    canvas.width = img.width / 6;
+                    canvas.height = img.height / 6;
+                    // ctx.drawImage(img, 0, 0);
+                    ctx.drawImage(img, 0, 0, img.width, img.height, // source rectangle
+                        0, 0, canvas.width, canvas.height); // destination rectangle
+                    //   grayScale(ctx, canvas);
+                }
+                img.src = event.target.result;
+            }
+            reader.readAsDataURL(this.file);
+        }
+
+    });
+</script>
