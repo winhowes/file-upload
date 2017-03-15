@@ -3,17 +3,15 @@
 
     </style>
     <template>
-         <canvas id="canvas" width="{{width}}" height="{{height}}"></canvas>
+         <canvas id="canvas" width="200" height="100"></canvas>
     </template>
 </dom-module>
 <script>
     Polymer({
         is: 'canvas-render',
         properties: {
-            width: 100,
-            height: 100,
-            background: 'white',
-            color: 'black',
+            width: 400,
+            height: 200,
             file: Object
         },
 
@@ -22,18 +20,70 @@
             var canvas = this.$.canvas;
             var ctx = canvas.getContext('2d');
             var reader = new FileReader();
+            var width = 450;
+            var height = 200;
+
             reader.onload = function(event) {
                 var img = new Image();
                 img.onload = function() {
-                    canvas.width = img.width / 6;
-                    canvas.height = img.height / 6;
-                    ctx.drawImage(img, 0, 0, img.width, img.height, // source rectangle
-                        0, 0, canvas.width, canvas.height); // destination rectangle
+                    ctx.scale(0.5, 0.5);
+                    // ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    drawCanvas(ctx, img, 0, 0, width, height);
                 }
                 img.src = event.target.result;
             }
             reader.readAsDataURL(this.file);
-        }
+        },
+
+
 
     });
+
+    function drawCanvas(ctx, img, x, y, w, h, offsetX, offsetY) {
+
+        if (arguments.length === 2) {
+            x = y = 0;
+            w = ctx.canvas.width;
+            h = ctx.canvas.height;
+        }
+
+        // default offset is center
+        offsetX = typeof offsetX === "number" ? offsetX : 0.5;
+        offsetY = typeof offsetY === "number" ? offsetY : 0.5;
+
+        // keep bounds [0.0, 1.0]
+        if (offsetX < 0) offsetX = 0;
+        if (offsetY < 0) offsetY = 0;
+        if (offsetX > 1) offsetX = 1;
+        if (offsetY > 1) offsetY = 1;
+
+        var iw = img.width,
+            ih = img.height,
+            r = Math.min(w / iw, h / ih),
+            nw = iw * r, // new prop. width
+            nh = ih * r, // new prop. height
+            cx, cy, cw, ch, ar = 1;
+
+        // decide which gap to fill    
+        if (nw < w) ar = w / nw;
+        if (Math.abs(ar - 1) < 1e-14 && nh < h) ar = h / nh; // updated
+        nw *= ar;
+        nh *= ar;
+
+        // calc source rectangle
+        cw = iw / (nw / w);
+        ch = ih / (nh / h);
+
+        cx = (iw - cw) * offsetX;
+        cy = (ih - ch) * offsetY;
+
+        // make sure source rectangle is valid
+        if (cx < 0) cx = 0;
+        if (cy < 0) cy = 0;
+        if (cw > iw) cw = iw;
+        if (ch > ih) ch = ih;
+
+        // fill image in dest. rectangle
+        ctx.drawImage(img, cx, cy, cw, ch, x, y, w, h);
+    }
 </script>
