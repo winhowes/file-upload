@@ -135,7 +135,7 @@ Example:
         <div id="dropArea" hidden$="{{!_shownDropText}}">{{dropText}}</div>
         <template is="dom-repeat" items="{{files}}">
           <div class="file">
-           <canvas-render hidden$="{{thumbnailHidden}}" file="{{item}}" class$="{{getClass(item.complete)}}"></canvas-render>
+           <canvas-render hidden$="{{_shownThumbnail}}" file="{{item}}" class$="{{getClass(item.complete)}}"></canvas-render>
             <div class="name">
               <span>{{item.name}}</span>
               <div class="commands">
@@ -219,9 +219,9 @@ Example:
             },
 
             /**
-             * `thumbnailHidden` indicates whether or not the image thumbnail should be hidden.
+             * `thumbnail` indicates whether or not the image thumbnail should be hidden.
              */
-            thumbnailHidden: {
+            thumbnail: {
                 type: Boolean,
                 value: false
             },
@@ -546,6 +546,13 @@ Example:
         },
 
         /**
+         * Whether or not to display the thumbnail text
+         */
+        _showThumbnail: function() {
+            this.set('_shownThumbnail', (!this.files.length && this.thumbnail));
+        },
+
+        /**
          * Uploads a file
          *
          * @param {object} file An element of the files array
@@ -557,6 +564,7 @@ Example:
 
             this.fire('before-upload');
             this._showDropText();
+            this._showThumbnail();
 
             var prefix = 'files.' + this.files.indexOf(file);
             var self = this;
