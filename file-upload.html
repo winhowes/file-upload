@@ -135,7 +135,7 @@ Example:
         <div id="dropArea" hidden$="{{!_shownDropText}}">{{dropText}}</div>
         <template is="dom-repeat" items="{{files}}">
           <div class="file">
-           <canvas-render hidden$="{{_shownThumbnail}}" file="{{item}}" class$="{{getClass(item.complete)}}"></canvas-render>
+           <canvas-render file="{{item}}" class$="{{getClass(item.complete)}}"></canvas-render>
             <div class="name">
               <span>{{item.name}}</span>
               <div class="commands">
@@ -423,7 +423,6 @@ Example:
                     e.dataTransfer.dropEffect = effectAllowed === 'move' ? 'move' : 'copy';
                 }
                 // end of workaround
-
                 return false;
             }
 
@@ -546,13 +545,6 @@ Example:
         },
 
         /**
-         * Whether or not to display the thumbnail text
-         */
-        _showThumbnail: function() {
-            this.set('_shownThumbnail', (!this.files.length && this.thumbnail));
-        },
-
-        /**
          * Uploads a file
          *
          * @param {object} file An element of the files array
@@ -564,7 +556,6 @@ Example:
 
             this.fire('before-upload');
             this._showDropText();
-            this._showThumbnail();
 
             var prefix = 'files.' + this.files.indexOf(file);
             var self = this;
