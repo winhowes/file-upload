@@ -65,6 +65,8 @@ Example:
         
         #dropArea {
             text-align: center;
+            margin: 20px;
+            padding: 0.7em 0.57em;
             @apply(--file-upload-drop-area);
         }
         
@@ -74,7 +76,7 @@ Example:
         }
         
         paper-button#button {
-            margin-bottom: 20px;
+            margin: 20px;
             @apply(--file-upload-button);
         }
         
@@ -148,14 +150,13 @@ Example:
 
     <template>
     <div>
-      <paper-button id="button" icon="file-upload-icons:file-upload" class="blue" on-click="_fileClick" alt="{{paperButtonAlt}}" title="{{paperButtonTitle}}">
+      <div id='UploadBorder' hidden$="{{hideFileList}}">
+          <paper-button id="button" icon="file-upload-icons:file-upload" class="blue" on-click="_fileClick" alt="{{paperButtonAlt}}" title="{{paperButtonTitle}}">
         <content></content>
       </paper-button>
-      <div id='UploadBorder' hidden$="{{hideFileList}}">
         <div id="dropArea" hidden$="{{!_shownDropText}}">{{dropText}}</div>
-
-        <div id="uploadArea">
-            <div class="file">
+        </div>
+        <div id="uploadArea" hidden$="{{!_shownUploadArea}}">
             <table>
                 <thead>
                     <tr>
@@ -208,8 +209,6 @@ Example:
         </template>
     </tbody>
     </table>
-    </div>
-    </div>
     </div>
     </div>
     <input type="file" id="fileInput" on-change="_fileChange" hidden multiple="{{multi}}" accept="{{accept}}">
@@ -401,6 +400,11 @@ Example:
                 value: false
             },
 
+            _shownUploadArea: {
+                type: Boolean,
+                value: false
+            },
+
             /**
              * `additional` object of key-pair values to send additional values along with file.
              */
@@ -448,7 +452,8 @@ Example:
         clear: function() {
             this.set('files', []);
             this.$.fileInput.value = '';
-            this._showDropText();
+            // this._showDropText();
+            this._showUploadArea();
         },
 
         ready: function() {
@@ -494,6 +499,9 @@ Example:
             this.ondrop = function(event) {
                 this.toggleClass('hover', false, uploadBorder);
                 event.preventDefault();
+
+                console.log(this._shownUploadArea);
+                this._shownUploadArea = true;
 
                 // Check if multiple upload is allowed
                 if (!this.multi && this.files.length !== 0) {
@@ -569,7 +577,8 @@ Example:
                     file.xhr.abort();
                 }
                 this.splice('files', this.files.indexOf(file), 1);
-                this._showDropText();
+                //   this._showDropText();
+                this._showUploadArea();
             }
         },
 
@@ -604,6 +613,10 @@ Example:
             this.set('_shownDropText', (!this.files.length && this.droppable));
         },
 
+        _showUploadArea: function() {
+            this.set('_shownUploadArea', this.files.length);
+        },
+
         /**
          * Uploads a file
          *
@@ -615,7 +628,8 @@ Example:
             }
 
             this.fire('before-upload');
-            this._showDropText();
+            //  this._showDropText();
+            this._showUploadArea();
 
             var prefix = 'files.' + this.files.indexOf(file);
             var self = this;
