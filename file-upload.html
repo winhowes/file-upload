@@ -185,6 +185,7 @@ Example:
                 <div class="commands">
                 <iron-icon icon="file-upload-icons:autorenew" title="{{retryText}}" on-click="_retryUpload" hidden$="{{!item.error}}" style="fill:cornflowerblue"></iron-icon>
                 <iron-icon icon="file-upload-icons:cancel" title="{{removeText}}" on-click="_cancelUpload" hidden$="{{item.complete}}" style="fill:red"></iron-icon>
+                <iron-icon icon="file-upload-icons:check-cancel" title="{{removeText}}" on-click="_deleteUpload" hidden$="{{!item.complete}}" style="fill:red"></iron-icon>
                 <iron-icon icon="file-upload-icons:check-circle" title="{{successText}}" hidden$="{{!item.complete}}" style="fill:green"></iron-icon>
               </div>
             </td>
@@ -480,8 +481,6 @@ Example:
             this.ondrop = function(event) {
                 this.toggleClass('hover', false, uploadBorder);
                 event.preventDefault();
-
-                console.log(this._shownUploadArea);
                 this._shownUploadArea = true;
 
                 // Check if multiple upload is allowed
@@ -573,6 +572,15 @@ Example:
         },
 
         /**
+         * Deletes the file from where its uploaded to
+         *
+         * @param {object} e An event object
+         */
+        _deleteUpload: function(e) {
+
+        },
+
+        /**
          * Retries to upload the file
          *
          * @param {object} e An event object
@@ -632,8 +640,6 @@ Example:
             xhr.withCredentials = this.withCredentials;
 
             xhr.upload.onprogress = function(e) {
-                console.log(e.loaded);
-                console.log(e.total);
                 var done = e.loaded,
                     total = e.total;
                 self.set(prefix + '.progress', Math.floor((done / total) * 1000) / 10);
