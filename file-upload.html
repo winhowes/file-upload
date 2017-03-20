@@ -189,31 +189,12 @@ Example:
               </div>
             </td>
             </tr>
-            <!--
-          <div class="file">
-            <div class="name">
-              <span>{{item.name}}</span>
-              <div class="commands">
-                <iron-icon icon="file-upload-icons:autorenew" title="{{retryText}}" on-click="_retryUpload" hidden$="{{!item.error}}" style="fill:cornflowerblue"></iron-icon>
-                <iron-icon icon="file-upload-icons:cancel" title="{{removeText}}" on-click="_cancelUpload" hidden$="{{item.complete}}" style="fill:red"></iron-icon>
-                <iron-icon icon="file-upload-icons:check-circle" title="{{successText}}" hidden$="{{!item.complete}}" style="fill:green"></iron-icon>
-              </div>
-            </div>
-            <div class="error" hidden$="{{!item.error}}">{{errorText}}</div>
-            <div class="progress-bar" hidden$={{progressHidden}}>
-              <paper-progress value$="{{item.progress}}" error$="{{item.error}}"></paper-progress>
-            </div>
-          </div>
-          </div>
-          -->
         </template>
     </tbody>
     </table>
     </div>
     </div>
     <input type="file" id="fileInput" on-change="_fileChange" hidden multiple="{{multi}}" accept="{{accept}}">
-    <!--<paper-toast id="toastSuccess" text="File uploaded successfully!"></paper-toast>
-    <paper-toast id="toastFail" text="Error uploading file!"></paper-toast>-->
     </template>
 
 </dom-module>
@@ -325,7 +306,7 @@ Example:
              */
             method: {
                 type: String,
-                value: 'PUT'
+                value: 'POST'
             },
 
             /**
@@ -651,6 +632,8 @@ Example:
             xhr.withCredentials = this.withCredentials;
 
             xhr.upload.onprogress = function(e) {
+                console.log(e.loaded);
+                console.log(e.total);
                 var done = e.loaded,
                     total = e.total;
                 self.set(prefix + '.progress', Math.floor((done / total) * 1000) / 10);
