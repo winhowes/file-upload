@@ -55,11 +55,11 @@ Example:
         
         .img-grayscale.completed {
             -webkit-filter: grayscale(0%);
-            -webkit-transition: .5s ease-in-out;
+            -webkit-transition: .4s ease-in-out;
             -moz-filter: grayscale(0%);
-            -moz-transition: .5s ease-in-out;
+            -moz-transition: .4s ease-in-out;
             -o-filter: grayscale(0%);
-            -o-transition: .5s ease-in-out;
+            -o-transition: .4s ease-in-out;
             filter: grayscale(0%);
         }
         
@@ -124,11 +124,17 @@ Example:
         }
         
         paper-progress {
-            --paper-progress-active-color: #03a9f4;
+            --paper-progress-active-color: green;
         }
         
         paper-progress[error] {
             --paper-progress-active-color: var(--error-color);
+        }
+        
+        paper-progress {
+            --paper-progress-transition-duration: 0.08s;
+            --paper-progress-transition-timing-function: ease;
+            --paper-progress-transition-transition-delay: 0s;
         }
         
         table {
@@ -181,11 +187,11 @@ Example:
               <paper-progress value$="{{item.progress}}" error$="{{item.error}}"></paper-progress>
             </div>
             </td>
-            <td>
+            <td> 
                 <div class="commands">
                 <iron-icon icon="file-upload-icons:autorenew" title="{{retryText}}" on-click="_retryUpload" hidden$="{{!item.error}}" style="fill:cornflowerblue"></iron-icon>
                 <iron-icon icon="file-upload-icons:cancel" title="{{removeText}}" on-click="_cancelUpload" hidden$="{{item.complete}}" style="fill:red"></iron-icon>
-                <iron-icon icon="file-upload-icons:check-cancel" title="{{removeText}}" on-click="_deleteUpload" hidden$="{{!item.complete}}" style="fill:red"></iron-icon>
+                <iron-icon icon="file-upload-icons:cancel" title="{{removeText}}" on-click="_deleteUpload" hidden$="{{!item.complete}}" style="fill:gray"></iron-icon>
                 <iron-icon icon="file-upload-icons:check-circle" title="{{successText}}" hidden$="{{!item.complete}}" style="fill:green"></iron-icon>
               </div>
             </td>
