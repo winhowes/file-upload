@@ -1,0 +1,92 @@
+<dom-module id="canvas-render">
+    <style>
+
+    </style>
+    <template>
+         <canvas id="canvas"></canvas>
+    </template>
+</dom-module>
+<script>
+    Polymer({
+        is: 'canvas-render',
+        properties: {
+            width: 400,
+            height: 200,
+            file: Object
+        },
+
+        attached: function() {
+            var canvas = this.$.canvas;
+            var ctx = canvas.getContext('2d');
+            var reader = new FileReader();
+            var width = 450;
+            var height = 200;
+
+            reader.onload = function(event) {
+                var img = new Image();
+                img.onload = function() {
+                    /* Depreciated
+                    // drawCanvas(ctx, img, 0, 0, width, height);
+                    */
+                    var hRatio = canvas.width / img.width;
+                    var vRatio = canvas.height / img.height;
+                    var ratio = Math.min(hRatio, vRatio);
+                    ctx.scale(0.8, 0.8);
+                    ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width * ratio, img.height * ratio);
+
+                }
+                img.src = event.target.result;
+            }
+            reader.readAsDataURL(this.file);
+        }
+    });
+
+    // Resizes canvas to fit image all the same - depreciated
+    function drawCanvas(ctx, img, x, y, w, h, offsetX, offsetY) {
+
+        if (arguments.length === 2) {
+            x = y = 0;
+            w = ctx.canvas.width;
+            h = ctx.canvas.height;
+        }
+
+        // default offset is center
+        offsetX = typeof offsetX === "number" ? offsetX : 0.5;
+        offsetY = typeof offsetY === "number" ? offsetY : 0.5;
+
+        // keep bounds [0.0, 1.0]
+        if (offsetX < 0) offsetX = 0;
+        if (offsetY < 0) offsetY = 0;
+        if (offsetX > 1) offsetX = 1;
+        if (offsetY > 1) offsetY = 1;
+
+        var iw = img.width,
+            ih = img.height,
+            r = Math.min(w / iw, h / ih),
+            nw = iw * r, // new prop. width
+            nh = ih * r, // new prop. height
+            cx, cy, cw, ch, ar = 1;
+
+        // decide which gap to fill    
+        if (nw < w) ar = w / nw;
+        if (Math.abs(ar - 1) < 1e-14 && nh < h) ar = h / nh; // updated
+        nw *= ar;
+        nh *= ar;
+
+        // calc source rectangle
+        cw = iw / (nw / w);
+        ch = ih / (nh / h);
+
+        cx = (iw - cw) * offsetX;
+        cy = (ih - ch) * offsetY;
+
+        // make sure source rectangle is valid
+        if (cx < 0) cx = 0;
+        if (cy < 0) cy = 0;
+        if (cw > iw) cw = iw;
+        if (ch > ih) ch = ih;
+
+        // fill image in dest. rectangle
+        ctx.drawImage(img, cx, cy, cw, ch, x, y, w, h);
+    }
+</script>
