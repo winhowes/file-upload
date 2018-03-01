@@ -557,7 +557,7 @@ Example:
           self.set(prefix + '.progress', 100);
           self.updateStyles();
           self.fire('error', {filename: file.name, xhr: xhr});
-      }
+      };
       xhr.onload = function(e) {
         if (xhr.status >= 200 && xhr.status < 300) {
           self.fire('success', {filename: file.name, xhr: xhr});
@@ -568,7 +568,7 @@ Example:
       };
       xhr.onerror = function(e) {
           fireError();
-      }
+      };
       xhr.send(formData);
     }
   });
